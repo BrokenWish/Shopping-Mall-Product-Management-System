@@ -11,5 +11,5 @@ package model;
 /*
     管理员类
  */
-public class Administrator {
+public class Administrator extends User{
 }
