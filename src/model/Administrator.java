@@ -9,7 +9,7 @@ package model;
  */
 
 /*
-    管理员类
+    绠＄悊鍛樼被
  */
-public class Administrators {
+public class Administrator {
 }

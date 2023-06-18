@@ -9,12 +9,12 @@ package model;
  */
 
 /*
-    ¹©Ó¦ÉÌÀà
+    ä¾›åº”å•†ç±»
  */
 public class Supplier {
-    private String id;//¹©Ó¦ÉÌ±àºÅ
-    private String supplierName;//¹©Ó¦ÉÌÃû³Æ
-    private String teltphone;//ÁªÏµµç»°
+    private String id;//ä¾›åº”å•†ç¼–å·
+    private String supplierName;//ä¾›åº”å•†åç§°
+    private String teltphone;//è”ç³»ç”µè¯
 
     public String getId() {
         return id;

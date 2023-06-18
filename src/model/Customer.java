@@ -9,7 +9,7 @@ package model;
  */
 
 /*
-    ¿Í»§Àà
+    å®¢æˆ·ç±»
  */
 public class Customer extends User{
 }

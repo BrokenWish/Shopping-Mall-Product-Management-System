@@ -9,15 +9,15 @@ package model;
  */
 
 /*
-    ÉÌÆ·Àà
+    å•†å“ç±»
  */
 public class Commodity {
-    private String id;//ÉÌÆ·±àºÅ
-    private String commodityName;//ÉÌÆ·Ãû³Æ
-    private String type;//ÉÌÆ·ÀàĞÍ
-    private double price;//¼Û¸ñ
-    private Supplier supplier;//¹©Ó¦ÉÌ
-    private int number;//ÊıÁ¿
+    private String id;//å•†å“ç¼–å·
+    private String commodityName;//å•†å“åç§°
+    private String type;//å•†å“ç±»å‹
+    private double price;//ä»·æ ¼
+    private Supplier supplier;//ä¾›åº”å•†
+    private int number;//å‰©ä½™æ•°é‡
 
     public String getId() {
         return id;

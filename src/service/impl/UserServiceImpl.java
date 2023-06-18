@@ -8,24 +8,11 @@ import java.util.List;
 /**
  * @author Broken wish
  * @coding : utf-8
- * @create 2023-06-18-15:47
+ * @create 2023-06-18-16:47
  * @Name UserServiceImpl
  * @Projrct Shopping-Mall-Product-Management-System
  */
 public class UserServiceImpl implements UserService {
 
-    @Override
-    public List<Commodity> list() {
-        return null;
-    }
 
-    @Override
-    public Commodity findByName(String name) {
-        return null;
-    }
-
-    @Override
-    public Commodity findById(String id) {
-        return null;
-    }
 }

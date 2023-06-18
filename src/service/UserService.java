@@ -12,9 +12,12 @@ import java.util.List;
  * @Projrct Shopping-Mall-Product-Management-System
  */
 public interface UserService {
-    public List<Commodity> list();
+    //展示所有商品
+    public List<Commodity> listCommodities();
 
+    //根据名称查询商品，可模糊查询
     public Commodity findByName(String name);
 
+    //根据id查询商品
     public Commodity findById(String id);
 }

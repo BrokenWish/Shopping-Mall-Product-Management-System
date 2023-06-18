@@ -11,8 +11,8 @@ import java.util.List;
  */
 
 /*
-    ÓÃ»§Àà
-    ×÷Îª¿Í»§ºÍ¹ÜÀíÔ±µÄ¸¸Àà
+    ç”¨æˆ·ç±»
+    æä¾›åŸºæœ¬çš„å±æ€§ï¼Œä»¥ç”¨æ¥è¢«å®¢æˆ·å’Œç®¡ç†å‘˜ç±»ç»§æ‰¿
  */
 public class User {
     private String userName;
