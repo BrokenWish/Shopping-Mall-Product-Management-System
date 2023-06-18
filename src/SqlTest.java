@@ -7,7 +7,7 @@ import java.sql.*;
  * @Name test
  * @Projrct Shopping-Mall-Product-Management-System
  */
-public class test {
+public class SqlTest {
 
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://rm-uf6tp8qmdd70a844bto.mysql.rds.aliyuncs.com/speechcloud?serverTimezone=GMT%2B8";
