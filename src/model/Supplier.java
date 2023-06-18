@@ -13,7 +13,7 @@ package model;
  */
 public class Supplier {
     private String id;//供应商编号
-    private String name;//供应商名称
+    private String supplierName;//供应商名称
     private String teltphone;//联系电话
 
     public String getId() {
@@ -24,12 +24,12 @@ public class Supplier {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getSupplierName() {
+        return supplierName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSupplierName(String name) {
+        this.supplierName = name;
     }
 
     public String getTeltphone() {

@@ -13,6 +13,7 @@ package model;
  */
 public class Commodity {
     private String id;//商品编号
+    private String commodityName;//商品名称
     private String type;//商品类型
     private double price;//价格
     private Supplier supplier;//供应商
@@ -24,6 +25,14 @@ public class Commodity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCommodityName() {
+        return commodityName;
+    }
+
+    public void setCommodityName(String commodityName) {
+        this.commodityName = commodityName;
     }
 
     public String getType() {
