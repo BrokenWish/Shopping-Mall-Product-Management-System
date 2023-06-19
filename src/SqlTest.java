@@ -9,10 +9,18 @@ import java.sql.*;
  */
 public class SqlTest {
 
+    /**
+     * 	*javaè¿æ¥mysqlæ•°æ®åº“
+     * 	*1ã€åŠ è½½é©±åŠ¨ç¨‹åº
+     * 	*2ã€æ•°æ®åº“è¿æ¥å­—ç¬¦ä¸²"jdbc:mysql://localhost:3306/æ•°æ®åº“å?"
+     * 	*3ã€æ•°æ®åº“ç™»å½•å
+     * 	*3ã€æ•°æ®åº“ç™»å½•å¯†ç 
+     */
+
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://rm-uf6tp8qmdd70a844bto.mysql.rds.aliyuncs.com/speechcloud?serverTimezone=GMT%2B8";
 
-    // Êı¾İ¿âµÄÓÃ»§ÃûÓëÃÜÂë
+    // // MySQL 8.0 ä»¥ä¸Šç‰ˆæœ¬ - JDBC é©±åŠ¨ååŠæ•°æ®åº“ URL
     static final String USER = "brokenwish";
     static final String PASS = "1256338Mysql";
 
@@ -20,47 +28,47 @@ public class SqlTest {
         Connection conn = null;
         Statement stmt = null;
         try{
-            // ×¢²á JDBC Çı¶¯
+            // æ³¨å†Œ JDBC é©±åŠ¨
             Class.forName(JDBC_DRIVER);
 
-            // ´ò¿ªÁ´½Ó
-            System.out.println("Á¬½ÓÊı¾İ¿â...");
+            // æ‰“å¼€é“¾æ¥
+            System.out.println("è¿æ¥æ•°æ®åº“...");
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-            // Ö´ĞĞ²éÑ¯
-            System.out.println(" ÊµÀı»¯Statement¶ÔÏó...");
+            // æ‰§è¡ŒæŸ¥è¯¢
+            System.out.println(" å®ä¾‹åŒ–Statementå¯¹è±¡...");
             stmt = conn.createStatement();
             String sql;
             sql = "SELECT Start, Username FROM test";
             ResultSet rs = stmt.executeQuery(sql);
 
-            // Õ¹¿ª½á¹û¼¯Êı¾İ¿â
+            // å±•å¼€ç»“æœé›†æ•°æ®åº“
             while(rs.next()){
-                // Í¨¹ı×Ö¶Î¼ìË÷
+                // é€šè¿‡å­—æ®µæ£€ç´¢
                 int id  = rs.getInt("Start");
                 String name = rs.getString("Username");
 
-                // Êä³öÊı¾İ
+                // è¾“å‡ºæ•°æ®
                 System.out.print("ID: " + id);
-                System.out.print(", Õ¾µãÃû³Æ: " + name);
+                System.out.print(", å§“å: " + name);
                 System.out.print("\n");
             }
-            // Íê³Éºó¹Ø±Õ
+            // å®Œæˆåå…³é—­
             rs.close();
             stmt.close();
             conn.close();
         }catch(SQLException se){
-            // ´¦Àí JDBC ´íÎó
+            // å¤„ç† JDBC é”™è¯¯
             se.printStackTrace();
         }catch(Exception e){
-            // ´¦Àí Class.forName ´íÎó
+            // å¤„ç† Class.forName é”™è¯¯
             e.printStackTrace();
         }finally{
-            // ¹Ø±Õ×ÊÔ´
+            // å…³é—­èµ„æº
             try{
                 if(stmt!=null) stmt.close();
             }catch(SQLException se2){
-            }// Ê²Ã´¶¼²»×ö
+            }// ä»€ä¹ˆéƒ½ä¸åš
             try{
                 if(conn!=null) conn.close();
             }catch(SQLException se){
