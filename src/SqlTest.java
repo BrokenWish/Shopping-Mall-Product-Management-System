@@ -75,7 +75,7 @@ public class SqlTest {
                 se.printStackTrace();
             }
         }
-        System.out.println("Goodbye!");
+
     }
 
 }
