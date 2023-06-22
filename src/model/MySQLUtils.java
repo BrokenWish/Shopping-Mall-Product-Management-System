@@ -137,6 +137,4 @@ public class MySQLUtils {
         return rs;
     }
 
-    public static
-
 }
