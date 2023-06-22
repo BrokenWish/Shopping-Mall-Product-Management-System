@@ -1,6 +1,7 @@
 package service.impl;
 
 import model.Commodity;
+import model.MySQLUtils;
 import service.UserService;
 
 import java.util.List;
@@ -13,5 +14,6 @@ import java.util.List;
  * @Projrct Shopping-Mall-Product-Management-System
  */
 public class UserServiceImpl implements UserService {
+    MySQLUtils mySQLUtils = new MySQLUtils();
 
 }
