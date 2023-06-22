@@ -38,7 +38,96 @@ public class MySQLUtils {
         return conn;
     }
 
+        Connection conn = getConn();
+        Statement stmt;
+
+        try {
+            stmt = conn.createStatement();
+            String sql = TSQLLanguage;
+            stmt.executeQuery(sql);
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 
+    }
+
+    /**
+     * 删除方法，输入一段SQL删除语句，返回boolean表示是否成功
+     * @param TSQLLanguage
+     * @return
+     */
+    public static boolean deleteData(String TSQLLanguage){
+        if (TSQLLanguage == null){
+            return false;
+        }
+
+        Connection conn = getConn();
+        Statement stmt;
+
+        try {
+            stmt = conn.createStatement();
+            String sql = TSQLLanguage;
+            stmt.executeQuery(sql);
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    /**
+     * 更新方法，输入一段SQL更新语句，返回boolean表示是否成功
+     * @param TSQLLanguage
+     * @return
+     */
+    public static boolean updateData(String TSQLLanguage){
+        if (TSQLLanguage == null){
+            return false;
+        }
+
+        Connection conn = getConn();
+        Statement stmt;
+
+        try {
+            stmt = conn.createStatement();
+            String sql = TSQLLanguage;
+            stmt.executeQuery(sql);
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    /**
+     * 查询方法，输入一段SQL查询语句，返回一个结果集对象，如何提取其中数据，见SQLTest类
+     * @param TSQLLanguage
+     * @return
+     */
+    public static ResultSet getData(String TSQLLanguage){
+        if (TSQLLanguage == null){
+            throw new RuntimeException("SQL语句不能为空");
+        }
+
+        Connection conn = getConn();
+        ResultSet rs = null;
+        Statement stmt;
+
+        try {
+            stmt = conn.createStatement();
+            String sql = TSQLLanguage;
+            rs = stmt.executeQuery(sql);
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rs;
+    }
+
+    public static
 
 }
