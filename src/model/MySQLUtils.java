@@ -27,7 +27,7 @@ public class MySQLUtils {
         //mysql密码
         String password = "1256338Mysql";
         //数据库URL
-        String url = "jdbc:mysql://rm-uf6tp8qmdd70a844bto.mysql.rds.aliyuncs.com/speechcloud?serverTimezone=GMT%2B8";
+        String url = "jdbc:mysql://rm-uf6tp8qmdd70a844bto.mysql.rds.aliyuncs.com/shopping?serverTimezone=GMT%2B8";
 
         try {
             conn = DriverManager.getConnection(url, userName, password);
