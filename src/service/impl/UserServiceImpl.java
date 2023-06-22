@@ -22,6 +22,4 @@ public class UserServiceImpl implements UserService {
     static final String PASS = "1256338Mysql";
 
 
-
-
 }

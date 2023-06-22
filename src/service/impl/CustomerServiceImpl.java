@@ -1,6 +1,9 @@
 package service.impl;
 
+import model.Commodity;
 import service.CustomerService;
+
+import java.util.List;
 
 /**
  * @author Broken wish
@@ -10,4 +13,5 @@ import service.CustomerService;
  * @Projrct Shopping-Mall-Product-Management-System
  */
 public class CustomerServiceImpl extends UserServiceImpl implements CustomerService {
+
 }
