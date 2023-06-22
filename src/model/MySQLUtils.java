@@ -42,7 +42,7 @@ public class MySQLUtils {
      * 新增方法，输入一段SQL插入语句
      * @param TSQLLanguage
      */
-    public static void addData(String TSQLLanguage){
+    public void addData(String TSQLLanguage){
         if (TSQLLanguage == null){
             throw new RuntimeException("SQL语句不能为空");
         }
@@ -67,7 +67,7 @@ public class MySQLUtils {
      * @param TSQLLanguage
      * @return
      */
-    public static boolean deleteData(String TSQLLanguage){
+    public boolean deleteData(String TSQLLanguage){
         if (TSQLLanguage == null){
             return false;
         }
@@ -91,7 +91,7 @@ public class MySQLUtils {
      * @param TSQLLanguage
      * @return
      */
-    public static boolean updateData(String TSQLLanguage){
+    public boolean updateData(String TSQLLanguage){
         if (TSQLLanguage == null){
             return false;
         }
@@ -115,7 +115,7 @@ public class MySQLUtils {
      * @param TSQLLanguage
      * @return
      */
-    public static ResultSet getData(String TSQLLanguage){
+    public ResultSet getData(String TSQLLanguage){
         if (TSQLLanguage == null){
             throw new RuntimeException("SQL语句不能为空");
         }
