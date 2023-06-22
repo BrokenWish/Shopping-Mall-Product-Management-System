@@ -38,6 +38,15 @@ public class MySQLUtils {
         return conn;
     }
 
+    /**
+     * 新增方法，输入一段SQL插入语句
+     * @param TSQLLanguage
+     */
+    public static void addData(String TSQLLanguage){
+        if (TSQLLanguage == null){
+            throw new RuntimeException("SQL语句不能为空");
+        }
+
         Connection conn = getConn();
         Statement stmt;
 
