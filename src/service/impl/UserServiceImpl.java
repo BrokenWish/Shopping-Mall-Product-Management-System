@@ -31,23 +31,23 @@ public class UserServiceImpl implements UserService {
 
             while (rs.next()) {
                 Commodity commodity = new Commodity();
-                commodity.setId(rs.getString("Commodity-id"));
-                commodity.setCommodityName(rs.getString("Commodity-name"));
-                commodity.setType(rs.getString("Commodity-type"));
-                commodity.setPrice(rs.getFloat("Commodity-price"));
-                commodity.setCost(rs.getFloat("Commodity-cost"));
-                commodity.setNumber(rs.getInt("Commodity-number"));
-                String string = rs.getString("Commodity-vendor");
+                commodity.setId(rs.getString("Commodity_id"));
+                commodity.setCommodityName(rs.getString("Commodity_name"));
+                commodity.setType(rs.getString("Commodity_type"));
+                commodity.setPrice(rs.getFloat("Commodity_price"));
+                commodity.setCost(rs.getFloat("Commodity_cost"));
+                commodity.setNumber(rs.getInt("Commodity_number"));
+                String string = rs.getString("Commodity_vendor");
 
-                PreparedStatement vendorPs = MySQLUtils.getConn().prepareStatement("SELECT * FROM vendor WHERE Vendor-name=?");
+                PreparedStatement vendorPs = MySQLUtils.getConn().prepareStatement("SELECT * FROM vendor WHERE Vendor_name=?");
                 vendorPs.setString(1, string);
                 ResultSet vendorData = vendorPs.executeQuery();
 
                 Supplier supplier = new Supplier();
                 while (vendorData.next()) {
-                    supplier.setSupplierName(vendorData.getString("Vendor-name"));
-                    supplier.setId(vendorData.getString("Vendor-id"));
-                    supplier.setTeltphone(vendorData.getString("Vendor-phone"));
+                    supplier.setSupplierName(vendorData.getString("Vendor_name"));
+                    supplier.setId(vendorData.getString("Vendor_id"));
+                    supplier.setTeltphone(vendorData.getString("Vendor_phone"));
                 }
 
                 commodity.setSupplier(supplier);
@@ -67,36 +67,75 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Commodity> findByName(String name) {
-        return null;
-    }
-
-    @Override
-    public Commodity findById(String id) {
-        Commodity commodity = null;
+        List<Commodity> commodityList = new ArrayList<>();
 
         try {
-            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM commodity WHERE commodity-id=" + id);
+            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM commodity WHERE Commodity_name LIKE '%" + name + "%'");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                commodity = new Commodity();
-                commodity.setId(rs.getString("Commodity-id"));
-                commodity.setCommodityName(rs.getString("Commodity-name"));
-                commodity.setType(rs.getString("Commodity-type"));
-                commodity.setPrice(rs.getFloat("Commodity-price"));
-                commodity.setCost(rs.getFloat("Commodity-cost"));
-                commodity.setNumber(rs.getInt("Commodity-number"));
-                String string = rs.getString("Commodity-vendor");
+                Commodity commodity = new Commodity();
+                commodity.setId(rs.getString("Commodity_id"));
+                commodity.setCommodityName(rs.getString("Commodity_name"));
+                commodity.setType(rs.getString("Commodity_type"));
+                commodity.setPrice(rs.getFloat("Commodity_price"));
+                commodity.setCost(rs.getFloat("Commodity_cost"));
+                commodity.setNumber(rs.getInt("Commodity_number"));
+                String string = rs.getString("Commodity_vendor");
 
-                PreparedStatement vendorPs = MySQLUtils.getConn().prepareStatement("SELECT * FROM vendor WHERE Vendor-name=?");
+                PreparedStatement vendorPs = MySQLUtils.getConn().prepareStatement("SELECT * FROM vendor WHERE Vendor_name=?");
                 vendorPs.setString(1, string);
                 ResultSet vendorData = vendorPs.executeQuery();
 
                 Supplier supplier = new Supplier();
                 while (vendorData.next()) {
-                    supplier.setSupplierName(vendorData.getString("Vendor-name"));
-                    supplier.setId(vendorData.getString("Vendor-id"));
-                    supplier.setTeltphone(vendorData.getString("Vendor-phone"));
+                    supplier.setSupplierName(vendorData.getString("Vendor_name"));
+                    supplier.setId(vendorData.getString("Vendor_id"));
+                    supplier.setTeltphone(vendorData.getString("Vendor_phone"));
+                }
+
+                commodity.setSupplier(supplier);
+                commodityList.add(commodity);
+
+                vendorData.close();
+                vendorPs.close();
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return commodityList;
+    }
+
+    @Override
+    public Commodity findById(String id) {
+        Commodity commodity = new Commodity();
+
+        try {
+            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM commodity WHERE commodity_id=" + id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                commodity = new Commodity();
+                commodity.setId(rs.getString("Commodity_id"));
+                commodity.setCommodityName(rs.getString("Commodity_name"));
+                commodity.setType(rs.getString("Commodity_type"));
+                commodity.setPrice(rs.getFloat("Commodity_price"));
+                commodity.setCost(rs.getFloat("Commodity_cost"));
+                commodity.setNumber(rs.getInt("Commodity_number"));
+                String string = rs.getString("Commodity_vendor");
+
+                PreparedStatement vendorPs = MySQLUtils.getConn().prepareStatement("SELECT * FROM vendor WHERE Vendor_name=?");
+                vendorPs.setString(1, string);
+                ResultSet vendorData = vendorPs.executeQuery();
+
+                Supplier supplier = new Supplier();
+                while (vendorData.next()) {
+                    supplier.setSupplierName(vendorData.getString("Vendor_name"));
+                    supplier.setId(vendorData.getString("Vendor_id"));
+                    supplier.setTeltphone(vendorData.getString("Vendor_phone"));
                 }
 
                 commodity.setSupplier(supplier);
@@ -114,11 +153,13 @@ public class UserServiceImpl implements UserService {
     }
 
     public static void main(String[] args) {
-        UserService userService = new UserServiceImpl();
+        UserServiceImpl userService = new UserServiceImpl();
 
-        Commodity commodity = userService.findById("1");
+        List<Commodity> list = userService.findByName("因");
 
+        for (Commodity commodity : list){
+            System.out.println(commodity.getCommodityName());
+        }
 
-        System.out.println(commodity);
     }
 }

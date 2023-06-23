@@ -13,5 +13,5 @@ import java.util.List;
  */
 public interface CustomerService {
     //查看自己的购物车
-    public List<Commodity> listShoppingCart();
+    public List<Commodity> listShoppingCart(String customerId);
 }

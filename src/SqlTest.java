@@ -39,14 +39,14 @@ public class SqlTest {
             System.out.println(" 实例化Statement对象...");
             stmt = conn.createStatement();
             String sql;
-            sql = "SELECT Vendor-id, Vendor-name FROM vendor";
+            sql = "SELECT Vendor_id, Vendor_name FROM vendor";
             ResultSet rs = stmt.executeQuery(sql);
 
             // 展开结果集数据库
             while(rs.next()){
                 // 通过字段检索
-                int id  = rs.getInt("Vendor-id");
-                String name = rs.getString("Vendor-name");
+                int id  = rs.getInt("Vendor_id");
+                String name = rs.getString("Vendor_name");
 
                 // 输出数据
                 System.out.print("ID: " + id);

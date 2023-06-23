@@ -75,4 +75,17 @@ public class Commodity {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    @Override
+    public String toString() {
+        return "Commodity{" +
+                "id='" + id + '\'' +
+                ", commodityName='" + commodityName + '\'' +
+                ", type='" + type + '\'' +
+                ", price=" + price +
+                ", cost=" + cost +
+                ", supplier=" + supplier.getSupplierName() +
+                ", number=" + number +
+                '}';
+    }
 }
