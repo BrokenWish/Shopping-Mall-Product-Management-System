@@ -16,7 +16,7 @@ public interface UserService {
     public List<Commodity> listCommodities();
 
     //根据名称查询商品，可模糊查询
-    public Commodity findByName(String name);
+    public List<Commodity> findByName(String name);
 
     //根据id查询商品
     public Commodity findById(String id);

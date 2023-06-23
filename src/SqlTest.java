@@ -18,7 +18,7 @@ public class SqlTest {
      */
 
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://rm-uf6tp8qmdd70a844bto.mysql.rds.aliyuncs.com/speechcloud?serverTimezone=GMT%2B8";
+    static final String DB_URL = "jdbc:mysql://rm-uf6tp8qmdd70a844bto.mysql.rds.aliyuncs.com/shopping?serverTimezone=GMT%2B8";
 
     // // MySQL 8.0 以上版本 - JDBC 驱动名及数据库 URL
     static final String USER = "brokenwish";
@@ -39,14 +39,14 @@ public class SqlTest {
             System.out.println(" 实例化Statement对象...");
             stmt = conn.createStatement();
             String sql;
-            sql = "SELECT Start, Username FROM test";
+            sql = "SELECT Vendor-id, Vendor-name FROM vendor";
             ResultSet rs = stmt.executeQuery(sql);
 
             // 展开结果集数据库
             while(rs.next()){
                 // 通过字段检索
-                int id  = rs.getInt("Start");
-                String name = rs.getString("Username");
+                int id  = rs.getInt("Vendor-id");
+                String name = rs.getString("Vendor-name");
 
                 // 输出数据
                 System.out.print("ID: " + id);

@@ -16,6 +16,7 @@ public class Commodity {
     private String commodityName;//商品名称
     private String type;//商品类型
     private double price;//价格
+    private double cost;//进价
     private Supplier supplier;//供应商
     private int number;//剩余数量
 
@@ -49,6 +50,14 @@ public class Commodity {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 
     public Supplier getSupplier() {

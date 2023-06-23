@@ -14,4 +14,8 @@ import java.util.List;
  */
 public class CustomerServiceImpl extends UserServiceImpl implements CustomerService {
 
+    @Override
+    public List<Commodity> listShoppingCart() {
+        return null;
+    }
 }
