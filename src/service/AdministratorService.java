@@ -1,6 +1,7 @@
 package service;
 
 import model.Commodity;
+import model.Customer;
 import model.Order;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface AdministratorService {
     public void modifyCommodity(Commodity commodity);
 
     //查询用户
-    public List<Commodity> listCommodity();
+    public List<Customer> listCustomer();
 
     //查询所有用户的订单
     public List<Order> listOrder();

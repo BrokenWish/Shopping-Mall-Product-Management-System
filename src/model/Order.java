@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 /**
@@ -55,4 +56,16 @@ public class Order {
     public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
+
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "customerId='" + customerId + '\'' +
+                ", orderNum=" + orderNum +
+                ", orderTime=" + orderTime +
+                ", orderId='" + orderId + '\'' +
+                '}';
+    }
+
 }

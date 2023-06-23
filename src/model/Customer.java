@@ -12,4 +12,40 @@ package model;
     客户类
  */
 public class Customer extends User{
+    private String customerId;
+    private String customerName;
+    private String cusomerPhone;
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCusomerPhone() {
+        return cusomerPhone;
+    }
+
+    public void setCusomerPhone(String cusomerPhone) {
+        this.cusomerPhone = cusomerPhone;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "customerId='" + customerId + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", cusomerPhone='" + cusomerPhone + '\'' +
+                '}';
+    }
 }
