@@ -1,11 +1,19 @@
 package shopping.control;
 
+import model.Administrator;
+import model.Customer;
+import service.AdministratorService;
+import service.impl.AdministratorsServiceImpl;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ShoppingCartGUI extends JFrame implements ActionListener{
+    private AdministratorService administratorService = new AdministratorsServiceImpl();
+
 	 private JLabel role,account,password;//三个标签 用户身份 用户账号 密码
 	 private JTextField usernameField;//文本框
 
@@ -58,25 +66,47 @@ public class ShoppingCartGUI extends JFrame implements ActionListener{
         roleCombox.addActionListener(this);
         
     }
+
+
     public void actionPerformed(ActionEvent e)
     {
     	if(e.getSource()==enterBtn)
     	{
-    		String account=new String (usernameField.getText());
-    		String password=new String(passwordField.getPassword());
-    		if(Conf.account==null||(!(Conf.password.equals(password))))
-    		{
-    			JOptionPane.showMessageDialog(this, "登录失败");
-    			return;
-    		}
-    		JOptionPane.showMessageDialog(this, "登录成功");
-    		this.dispose();
-    		if(roleCombox.getSelectedItem()==("管理员"))
-    		{
-    			new AdministratorsGUI();
-    		}
-    		else
-    			new CustomerGUI();
+
+            if (roleCombox.getSelectedItem()==("客户")){
+
+                String account=new String (usernameField.getText());
+                String password=new String(passwordField.getPassword());
+                Customer customer = administratorService.findCustomerByAccount(account);
+                if(account == null||password == null || customer == null || !customer.getUserName().equals(account) || customer.getPassword().equals(password))
+                {
+                    JOptionPane.showMessageDialog(this, "登录失败");
+                    return;
+                } else if (customer.getUserName().equals(account) && customer.getPassword().equals(password)){
+                    JOptionPane.showMessageDialog(this, "登录成功");
+                    new CustomerGUI();
+                }
+
+
+            }else{
+
+                String account=new String (usernameField.getText());
+                String password=new String(passwordField.getPassword());
+                Administrator administrator = administratorService.findAdministraotrByAccount(account);
+                if(account == null||password == null || administrator == null || !administrator.getUserName().equals(account) || administrator.getPassword().equals(password))
+                {
+                    JOptionPane.showMessageDialog(this, "登录失败");
+                    this.dispose();
+                    return;
+                } else if (administrator.getUserName().equals(account) && administrator.getPassword().equals(password)){
+                    JOptionPane.showMessageDialog(this, "登录成功");
+                    this.dispose();
+                    new AdminstratorGUI();
+                }
+
+            }
+
+
     	}
     	else if(e.getSource()==enterzc)
     	{
@@ -88,7 +118,4 @@ public class ShoppingCartGUI extends JFrame implements ActionListener{
     }
   
 
-    public static void main(String[] args) {
-       new ShoppingCartGUI();
-    }
 }

@@ -1,5 +1,8 @@
 package shopping.control;
 
+import service.AdministratorService;
+import service.impl.AdministratorsServiceImpl;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -186,9 +189,4 @@ public class AdminstratorGUI extends JFrame{
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new AdminstratorGUI();
-        });
-    }
 }

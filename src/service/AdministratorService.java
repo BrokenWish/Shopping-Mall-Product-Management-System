@@ -1,5 +1,6 @@
 package service;
 
+import model.Administrator;
 import model.Commodity;
 import model.Customer;
 import model.Order;
@@ -24,6 +25,12 @@ public interface AdministratorService {
 
     //查询用户
     public List<Customer> listCustomer();
+
+    //根据用户名查询用户
+    public Customer findCustomerByAccount(String account);
+
+    ////根据用户名查询管理员
+    public Administrator findAdministraotrByAccount(String account);
 
     //查询所有用户的订单
     public List<Order> listOrder();

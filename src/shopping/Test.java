@@ -1,5 +1,7 @@
 package shopping;
 
+import shopping.control.ShoppingCartGUI;
+
 /**
  * @author Broken wish
  * @coding : utf-8
@@ -8,4 +10,7 @@ package shopping;
  * @Projrct Shopping-Mall-Product-Management-System
  */
 public class Test {
+    public static void main(String[] args) {
+        new ShoppingCartGUI();
+    }
 }

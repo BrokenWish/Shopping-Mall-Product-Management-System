@@ -80,6 +80,7 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
                 customer.setCustomerId(rs.getString("Customer_id"));
                 customer.setCustomerName(rs.getString("Customer_name"));
                 customer.setUserName(rs.getString("Customer_account"));
+                customer.setPassword(rs.getString("Customer_password"));
                 customer.setCusomerPhone(rs.getString("Customer_phone"));
 
                 customerList.add(customer);
@@ -92,6 +93,58 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
         }
 
         return customerList;
+    }
+
+    @Override
+    public Customer findCustomerByAccount(String account) {
+        Customer customer = new Customer();
+
+        try {
+            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM customer WHERE Customer_account=?");
+            ps.setString(1, account);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                customer.setCustomerId(rs.getString("Customer_id"));
+                customer.setCustomerName(rs.getString("Customer_name"));
+                customer.setUserName(rs.getString("Customer_account"));
+                customer.setPassword(rs.getString("Customer_password"));
+                customer.setCusomerPhone(rs.getString("Customer_phone"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customer;
+    }
+
+    @Override
+    public Administrator findAdministraotrByAccount(String account) {
+        Administrator administrator = new Administrator();
+
+        try {
+            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM administrator WHERE Administrator_account=?");
+            ps.setString(1, account);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                administrator.setId(rs.getString("Customer_id"));
+                administrator.setAdministratorName(rs.getString("Customer_name"));
+                administrator.setUserName(rs.getString("Customer_account"));
+                administrator.setPassword(rs.getString("Customer_password"));
+                administrator.setPhone(rs.getString("Customer_phone"));
+
+
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return administrator;
     }
 
     @Override
@@ -122,5 +175,13 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
 
         return orderList;
     }
+
+//    public static void main(String[] args) {
+//        AdministratorService administratorService = new AdministratorsServiceImpl();
+//
+//        Customer customerList = administratorService.findCustomerByAccount("user1");
+//
+//        System.out.println(customerList.toString());
+//    }
 
 }
