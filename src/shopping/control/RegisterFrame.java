@@ -29,7 +29,7 @@ public class RegisterFrame extends JFrame implements ActionListener{
        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//关闭窗口时，退出应用程序
        setLocationRelativeTo(null);
        account=new JLabel("账号名:");
-       name=new JLabel("姓名:");
+       name=new JLabel("用户名:");
        password=new JLabel("请输入密码:");
        espassword=new JLabel("请确认密码:");
        telephone=new JLabel("电话号码:");
