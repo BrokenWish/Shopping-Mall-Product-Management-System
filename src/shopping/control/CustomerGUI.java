@@ -121,7 +121,6 @@ public class CustomerGUI extends JFrame{
 
                 try {
                     for (int i = 0; i < cartListModel.getSize(); i++) {
-                        System.out.println(commodityList.get(i).toDetailString());
                         modify(commodityList.get(i));
                     }
                     refreshGUI();
@@ -192,10 +191,10 @@ public class CustomerGUI extends JFrame{
         boolean success = administratorService.modifyCommodity(modifycommodity);
 
         if (success) {
-//            List<Commodity> commodityList = administratorService.listCommodities();
-//            for (Commodity c : commodityList) {
-//                System.out.println(c.toDetailString());
-//            }
+            List<Commodity> commodityList = administratorService.listCommodities();
+            for (Commodity c : commodityList) {
+                System.out.println(c.toDetailString());
+            }
         } else {
             System.out.println("修改商品库存数量失败！");
         }
