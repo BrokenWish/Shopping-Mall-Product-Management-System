@@ -57,28 +57,6 @@ public class CustomerGUI extends JFrame{
         // 创建商品列表和加号按钮面板
         JPanel productPanel = new JPanel(new GridLayout(0, 2, 5, 5));
 
-        // 创建加号按钮的监听器
-        ActionListener addButtonListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton button = (JButton) e.getSource();
-                Commodity product =  (Commodity) button.getClientProperty("Commodity");
-                addToCart(product);
-            }
-        };
-
-        // 添加商品列表和加号按钮
-        for (Commodity commodity : commodityList) {
-            JButton addButton = new JButton("+");
-            addButton.putClientProperty("Commodity", commodity);
-            addButton.addActionListener(addButtonListener);
-            productPanel.add(new JLabel(commodity.getCommodityName() + "  ￥" + commodity.getPrice()+ "  剩余数量:" + commodity.getNumber()));
-            productPanel.add(addButton);
-        }
-
-        // 将搜索面板和商品列表和加号按钮面板添加到左边面板
-    
-        leftPanel.add(productPanel, BorderLayout.CENTER);
 
         // 创建右边购物车面板
         JPanel rightPanel = new JPanel(new BorderLayout());
@@ -94,6 +72,34 @@ public class CustomerGUI extends JFrame{
         cartListModel = new DefaultListModel<>();
         JList<Commodity> cartListUI = new JList<>(cartListModel);
         rightPanel.add(new JScrollPane(cartListUI), BorderLayout.CENTER);
+
+        // 创建加号按钮的监听器
+//        ActionListener addButtonListener = new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                JButton button = (JButton) e.getSource();
+//                Commodity product =  (Commodity) button.getClientProperty("Commodity");
+//                addToCart(product);
+//            }
+//        };
+
+        // 添加商品列表和加号按钮
+        for (Commodity commodity : commodityList) {
+            JButton addButton= new JButton("+");
+            addButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    addToCart(commodity);
+                }
+            });
+            productPanel.add(new JLabel(commodity.getCommodityName() + "  ￥" + commodity.getPrice()+ "  剩余数量:" + commodity.getNumber()));
+            productPanel.add(addButton);
+        }
+
+        // 将搜索面板和商品列表和加号按钮面板添加到左边面板
+    
+        leftPanel.add(productPanel, BorderLayout.CENTER);
+
 
         // 创建减号按钮的监听器
         ActionListener minusButtonListener = new ActionListener() {
@@ -121,9 +127,10 @@ public class CustomerGUI extends JFrame{
 
                 try {
                     for (int i = 0; i < cartListModel.getSize(); i++) {
+                        System.out.println(commodityList.get(i).toDetailString());
                         modify(commodityList.get(i));
                     }
-                    refreshGUI();
+                    new CustomerGUI();
                     JOptionPane.showMessageDialog(null, "订单支付成功！");
                     // update the existing GUI or create a new one here
                 } catch (Exception ex) {
@@ -146,9 +153,9 @@ public class CustomerGUI extends JFrame{
         setVisible(true);
     }
 
-    public void addToCart(Commodity product) {
-        cartListModel.addElement(product);
-        totalAmount += product.getPrice();
+    public void addToCart(Commodity commodity) {
+        cartListModel.addElement(commodity);
+        totalAmount += commodity.getPrice();
         updateTotalAmountLabel();
     }
 
@@ -191,20 +198,20 @@ public class CustomerGUI extends JFrame{
         boolean success = administratorService.modifyCommodity(modifycommodity);
 
         if (success) {
-            List<Commodity> commodityList = administratorService.listCommodities();
-            for (Commodity c : commodityList) {
-                System.out.println(c.toDetailString());
-            }
+//            List<Commodity> commodityList = administratorService.listCommodities();
+//            for (Commodity c : commodityList) {
+//                System.out.println(c.toDetailString());
+//            }
         } else {
             System.out.println("修改商品库存数量失败！");
         }
     }
 
    
-//    public static void main(String[] args) {
-//
-//                new CustomerGUI();
-//            }
+    public static void main(String[] args) {
+
+                new CustomerGUI();
+            }
   
 
 }
