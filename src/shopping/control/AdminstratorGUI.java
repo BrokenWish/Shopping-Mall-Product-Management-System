@@ -1,21 +1,26 @@
-package t07;
+package shopping.control;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Administrators extends JFrame{
-
-
-	private JLabel titleLabel;
+/**
+ * @author Broken wish
+ * @coding : utf-8
+ * @create 2023-06-24-10:16
+ * @Name AdminstratorGUI
+ * @Projrct AdministratorService.class
+ */
+public class AdminstratorGUI extends JFrame{
+    private JLabel titleLabel;
     private JButton addButton;
     private JButton deleteButton;
     private JTable productTable;
     private JButton searchButton;
     private JTextField searchField;
 
-    public Administrators() {
+    public AdminstratorGUI() {
         // 设置窗口标题
         setTitle("商城系统管理");
 
@@ -23,7 +28,7 @@ public class Administrators extends JFrame{
         titleLabel = new JLabel("商品列表");
         titleLabel.setFont(new Font("黑体", Font.BOLD, 20));
 
-        
+
         // 创建添加按钮
         addButton = new JButton("添加商品");
         addButton.addActionListener(new ActionListener() {
@@ -39,7 +44,7 @@ public class Administrators extends JFrame{
                         "成本:", costField
                 };
 
-                int option = JOptionPane.showConfirmDialog(Administrators.this, message, "添加商品", JOptionPane.OK_CANCEL_OPTION);
+                int option = JOptionPane.showConfirmDialog(AdminstratorGUI.this, message, "添加商品", JOptionPane.OK_CANCEL_OPTION);
                 if (option == JOptionPane.OK_OPTION) {
                     String name = nameField.getText();
                     double price = Double.parseDouble(priceField.getText());
@@ -55,18 +60,18 @@ public class Administrators extends JFrame{
         deleteButton = new JButton("删除商品");
         deleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String input = JOptionPane.showInputDialog(Administrators.this, "请输入要删除的商品名", "删除商品", JOptionPane.PLAIN_MESSAGE);
+                String input = JOptionPane.showInputDialog(AdminstratorGUI.this, "请输入要删除的商品名", "删除商品", JOptionPane.PLAIN_MESSAGE);
                 if (input != null && !input.isEmpty()) {
                     // 在这里处理删除商品的逻辑
                     System.out.println("删除商品：" + input);
                 }
             }
         });
-        
-     // 创建查找按钮
+
+        // 创建查找按钮
         searchButton = new JButton("查找");
         searchButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 String searchText = searchField.getText();
                 // 在这里处理根据文本框内容查找商品的逻辑
                 String[][] searchData = {
@@ -103,10 +108,10 @@ public class Administrators extends JFrame{
                 result +="成本:";
                 result += mergedData[0][2] + "\n";
 
-                JOptionPane.showMessageDialog(Administrators.this, result, "查找结果", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(AdminstratorGUI.this, result, "查找结果", JOptionPane.INFORMATION_MESSAGE);
             }
         });
-        
+
         // 创建查找文本框
         searchField = new JTextField(20);
 
@@ -123,7 +128,7 @@ public class Administrators extends JFrame{
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-     // 添加查找文本框到窗口的左上角
+        // 添加查找文本框到窗口的左上角
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -136,7 +141,7 @@ public class Administrators extends JFrame{
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(searchButton, gbc);
-        
+
         // 添加标题标签到窗口的左上角
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -183,7 +188,7 @@ public class Administrators extends JFrame{
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new Administrators();
+            new AdminstratorGUI();
         });
     }
 }
