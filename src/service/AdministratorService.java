@@ -5,6 +5,7 @@ import model.Commodity;
 import model.Customer;
 import model.Order;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -17,6 +18,9 @@ import java.util.List;
 public interface AdministratorService {
     //增加
     public boolean addCommodity(Commodity commodity);
+
+    //修改
+    public boolean modifyCommodity(Commodity commodity);
 
     //删除
     public boolean deleteCommodity(String commodityName);

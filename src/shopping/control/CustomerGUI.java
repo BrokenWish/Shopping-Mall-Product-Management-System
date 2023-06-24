@@ -1,6 +1,7 @@
 package shopping.control;
 
 import model.Commodity;
+import model.Supplier;
 import model.User;
 import service.AdministratorService;
 import service.impl.AdministratorsServiceImpl;
@@ -44,9 +45,6 @@ public class CustomerGUI extends JFrame{
         List<Commodity> commodityList = administratorService.listCommodities();
 
         // 创建商品列表的数据
-
-
-
 
         // 创建商品列表组件
         productListModel = new DefaultListModel<>();
@@ -119,7 +117,20 @@ public class CustomerGUI extends JFrame{
         JButton confirmButton = new JButton("支付");
         confirmButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	JOptionPane.showMessageDialog(null, "订单支付成功！");
+
+
+                try {
+                    for (int i = 0; i < cartListModel.getSize(); i++) {
+                        System.out.println(commodityList.get(i).toDetailString());
+                        modify(commodityList.get(i));
+                    }
+                    refreshGUI();
+                    JOptionPane.showMessageDialog(null, "订单支付成功！");
+                    // update the existing GUI or create a new one here
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "An error occurred while processing the order.");
+                }
             }
         });
         bottomPanel.add(totalAmountLabel);
@@ -152,12 +163,49 @@ public class CustomerGUI extends JFrame{
         totalAmountLabel.setText("总金额：" + String.format("%.2f", totalAmount));
     }
 
+    public void refreshGUI() {
+        // 重新获取商品列表
+        List<Commodity> commodityList = administratorService.listCommodities();
+
+        // 清空现有的商品列表模型
+        productListModel.clear();
+        cartListModel.clear();
+
+        // 重新添加商品到商品列表模型
+        for (Commodity commodity : commodityList) {
+            productListModel.addElement(commodity);
+        }
+
+        // 还需要清空购物车和总金额
+        totalAmount = 0.0;
+        updateTotalAmountLabel();
+    }
+
+    public void modify(Commodity commodity){
+        Commodity byId = administratorService.findById(commodity.getId());
+        int number = byId.getNumber();
+
+        Commodity modifycommodity = new Commodity();
+        modifycommodity.setId(commodity.getId());
+        modifycommodity.setNumber(--number);
+
+        boolean success = administratorService.modifyCommodity(modifycommodity);
+
+        if (success) {
+//            List<Commodity> commodityList = administratorService.listCommodities();
+//            for (Commodity c : commodityList) {
+//                System.out.println(c.toDetailString());
+//            }
+        } else {
+            System.out.println("修改商品库存数量失败！");
+        }
+    }
 
    
-    public static void main(String[] args) {
-
-                new CustomerGUI();
-            }
+//    public static void main(String[] args) {
+//
+//                new CustomerGUI();
+//            }
   
 
 }

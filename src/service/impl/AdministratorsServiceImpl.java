@@ -2,7 +2,9 @@ package service.impl;
 
 import model.*;
 import service.AdministratorService;
+import shopping.control.AdminstratorGUI;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +65,47 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
             ps.close();
             conn.close();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean modifyCommodity(Commodity commodity){
+        if (commodity == null) {
+            return false;
+        }
+
+        Commodity byName = new AdministratorsServiceImpl().findById(commodity.getId());
+        if (byName == null) {
+            return false;
+        }
+
+//        if (byName.getNumber() < commodity.getNumber()){
+//            return false;
+//        }
+
+        try (Connection conn = MySQLUtils.getConn();
+             PreparedStatement ps = conn.prepareStatement("UPDATE commodity SET Commodity_number=? WHERE Commodity_id=?")) {
+
+
+            conn.setAutoCommit(false);
+
+            ps.setInt(1, commodity.getNumber());
+            ps.setString(2, commodity.getId());
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected == 1) {
+                conn.commit();
+                return true;
+            } else {
+                conn.rollback();
+                return false;
+            }
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -213,12 +256,11 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
         return orderList;
     }
 
-//    public static void main(String[] args) {
-//        AdministratorService administratorService = new AdministratorsServiceImpl();
-//
-//        Customer customerList = administratorService.findCustomerByAccount("user1");
-//
-//        System.out.println(customerList.toString());
-//    }
+    public static void main(String[] args) {
+        AdministratorsServiceImpl administratorService = new AdministratorsServiceImpl();
+
+
+
+    }
 
 }
