@@ -1,5 +1,7 @@
 package shopping.control;
 
+import model.Commodity;
+import model.Supplier;
 import service.AdministratorService;
 import service.impl.AdministratorsServiceImpl;
 
@@ -7,9 +9,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class AdminstratorGUI extends JFrame {
-
+    private AdministratorsServiceImpl administratorsService = new AdministratorsServiceImpl();
 
 	private JLabel titleLabel;
     private JButton addButton;
@@ -35,24 +38,26 @@ public class AdminstratorGUI extends JFrame {
                 JTextField nameField = new JTextField();
                 JTextField priceField = new JTextField();
                 JTextField costField = new JTextField();
-                JTextField numberField = new JTextField();
                 JTextField kindField = new JTextField();
                 JTextField companyField = new JTextField();
                 JTextField remainField = new JTextField();
 
                 Object[] message = {
-                		"商品编号:", numberField,
                         "商品名称:", nameField,
                         "商品类型:", kindField,
                         "价格:", priceField,
                         "成本:", costField,
-                        "公司名称:", companyField,
-                        "剩余数量:", remainField,
+                        "供应商:", companyField,
+                        "商品数量:", remainField,
                 };
 
-                int option = JOptionPane.showConfirmDialog(AdministratorGUI.this, message, "添加商品", JOptionPane.OK_CANCEL_OPTION);
+                int option = JOptionPane.showConfirmDialog(AdminstratorGUI.this, message, "添加商品", JOptionPane.OK_CANCEL_OPTION);
                 if (option == JOptionPane.OK_OPTION) {
-                	String number = numberField.getText();
+                    if (nameField.getText().isEmpty() || kindField.getText().isEmpty() || priceField.getText().isEmpty() || costField.getText().isEmpty() || companyField.getText().isEmpty() || remainField.getText().isEmpty()) {
+                        JOptionPane.showMessageDialog(AdminstratorGUI.this, "所有信息都不能为空", "添加商品", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
                     String name = nameField.getText();
                     String kind = kindField.getText();
                     double price = Double.parseDouble(priceField.getText());
@@ -60,9 +65,27 @@ public class AdminstratorGUI extends JFrame {
                     String company = companyField.getText();
                     double remain = Double.parseDouble(remainField.getText());
 
-                    // 在这里处理添加商品的逻辑
-                    System.out.println("添加商品：" + number + "商品名称:" + name + "商品类型:" + kind + "价格：" + price + "，成本：" + cost + "公司名称：" + company + "剩余数量：" + remain);
-                }
+
+                    Commodity commodity = new Commodity();
+                    commodity.setCommodityName(name);
+                    commodity.setType(kind);
+                    commodity.setPrice(price);
+                    commodity.setCost(cost);
+                    Supplier supplier = new Supplier();
+                    supplier.setSupplierName(company);
+                    commodity.setSupplier(supplier);
+                    commodity.setNumber((int) remain);
+
+                    boolean success = administratorsService.addCommodity(commodity);
+
+                    if (success) {
+                        JOptionPane.showMessageDialog(AdminstratorGUI.this, "新增商品成功", "新增商品", JOptionPane.INFORMATION_MESSAGE);
+                        new AdminstratorGUI();
+                    } else {
+                        JOptionPane.showMessageDialog(AdminstratorGUI.this, "新增商品失败，该商品可能已经存在", "新增商品", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    }
             }
         });
 
@@ -70,10 +93,17 @@ public class AdminstratorGUI extends JFrame {
         deleteButton = new JButton("删除商品");
         deleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String input = JOptionPane.showInputDialog(AdministratorGUI.this, "请输入要删除的商品编号", "删除商品", JOptionPane.PLAIN_MESSAGE);
+                String input = JOptionPane.showInputDialog(AdminstratorGUI.this, "请输入要删除的商品编号", "删除商品", JOptionPane.PLAIN_MESSAGE);
                 if (input != null && !input.isEmpty()) {
                     // 在这里处理删除商品的逻辑
-                    System.out.println("删除商品：" + input);
+                    boolean success = administratorsService.deleteCommodity(input);
+
+                    if (success) {
+                        JOptionPane.showMessageDialog(AdminstratorGUI.this, "删除商品成功", "删除商品", JOptionPane.INFORMATION_MESSAGE);
+                        new AdminstratorGUI();
+                    } else {
+                        JOptionPane.showMessageDialog(AdminstratorGUI.this, "删除商品失败，请检查商品名称是否正确", "删除商品", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -84,71 +114,89 @@ public class AdminstratorGUI extends JFrame {
         	public void actionPerformed(ActionEvent e) {
                 String searchText = searchField.getText();
                 // 在这里处理根据文本框内容查找商品的逻辑
-                String[][] searchData = {
-                        {"4","商品4" ,"食品","40.0","45.0","食品有限公司", "150"},
-                        {"5","商品5","食品", "50.0","55.0","食品有限公司", "80"}
-                };
 
-                String[][] mergedData = new String[searchData.length + productTable.getRowCount()][7];
+                List<Commodity> searchData = administratorsService.findByName(searchText);
+
+
+
+                String[][] searchDataArray = new String[searchData.size()][];
+                for (int i = 0; i < searchData.size(); i++) {
+                    Commodity commodity = searchData.get(i);
+                    searchDataArray[i] = new String[] {
+                            commodity.getId(),
+                            commodity.getCommodityName(),
+                            commodity.getType(),
+                            String.valueOf(commodity.getPrice()),
+                            String.valueOf(commodity.getCost()),
+                            commodity.getSupplier().getSupplierName(),
+                            String.valueOf(commodity.getNumber())
+                    };
+                }
+
+                String[][] mergedData = new String[searchDataArray.length + productTable.getRowCount()][7];
                 for (int i = 0; i < productTable.getRowCount(); i++) {
                     for (int j = 0; j < 7; j++) {
                         mergedData[i][j] = productTable.getValueAt(i, j).toString();
                     }
                 }
-                for (int i = 0; i < searchData.length; i++) {
+                for (int i = 0; i < searchDataArray.length; i++) {
                     for (int j = 0; j < 7; j++) {
-                        mergedData[i + productTable.getRowCount()][j] = searchData[i][j];
+                        mergedData[i + productTable.getRowCount()][j] = searchDataArray[i][j];
                     }
                 }
 
-                String result = "查找结果：\n";
-//                result += "商品名称  价格   成本\n";
-//                for (int i = 0; i < mergedData.length; i++) {
-//                    if (mergedData[i][0].contains(searchText)) {
-//                        for (int j = 0; j < 3; j++) {
-//                            result += mergedData[i][j] + "  ";
-//                        }
-//                        result += "\n";
-//                    }
-//                };
-                for (int i = 0; i < mergedData.length; i++) {
-                	if (mergedData[i][0].contains(searchText)) {
-                		result +="商品编号:";
-                        result += mergedData[i][0] + "\n";
-                        result +="商品名称:";
-                        result += mergedData[i][1] + "\n";
-                        result +="商品类型:";
-                        result += mergedData[i][2] + "\n";
-                        result +="价格:";
-                        result += mergedData[i][3] + "\n";
-                        result +="进价:";
-                        result += mergedData[i][4] + "\n";
-                        result +="供应商:";
-                        result += mergedData[i][5] + "\n";
-                        result +="剩余数量:";
-                        result += mergedData[i][6] + "\n";
-                	}
-                	
-                }
-                
+                String result = "查找结果：\n\n";
+                boolean found = false;
 
-                JOptionPane.showMessageDialog(AdministratorGUI.this, result, "查找结果", JOptionPane.INFORMATION_MESSAGE);
+                for (int i = 0; i < mergedData.length - searchData.size(); i++) {
+                    if (mergedData[i][1].contains(searchText)) {
+                        found = true;
+                        result += "商品编号：" + mergedData[i][0] + "\n";
+                        result += "商品名称：" + mergedData[i][1] + "\n";
+                        result += "商品类型：" + mergedData[i][2] + "\n";
+                        result += "价格：" + mergedData[i][3] + "\n";
+                        result += "进价：" + mergedData[i][4] + "\n";
+                        result += "供应商：" + mergedData[i][5] + "\n";
+                        result += "剩余数量：" + mergedData[i][6] + "\n\n";
+                    }
+                }
+
+                if (!found) {
+                    result += "没有找到匹配的商品。";
+                }
+
+                JTextArea textArea = new JTextArea(result);
+                textArea.setEditable(false);
+                JOptionPane.showMessageDialog(AdminstratorGUI.this, new JScrollPane(textArea), "查找商品", JOptionPane.PLAIN_MESSAGE);
+
             }
         });
         
         // 创建查找文本框
         searchField = new JTextField(20);
 
-        // 创建商品列表表格
-        String[] columnNames = {"商品编号", "商品名称", "商品类型","价格","进价","供应商","剩余数量"};
-        Object[][] data = {
-                {"1","泡面", "食品", 10.0,15.0 ,"食品有限公司",100},
-                {"2","洗发水","日用品", 20.0,25.0 ,"日用品有限公司",50},
-                {"3","牙刷","日用品", 30.0,35.0 ,"日用品有限公司",200}
-        };
-        productTable = new JTable(data, columnNames);
+        List<Commodity> data = administratorsService.listCommodities();
 
-        // 设置布局管理器为GridBagLayout
+        // 将 List 转换为 Object[][]
+        Object[][] dataArray = new Object[data.size()][];
+        for (int i = 0; i < data.size(); i++) {
+            Commodity commodity = data.get(i);
+            dataArray[i] = new Object[] {
+                    commodity.getId(),
+                    commodity.getCommodityName(),
+                    commodity.getType(),
+                    commodity.getPrice(),
+                    commodity.getCost(),
+                    commodity.getSupplier().getSupplierName(),
+                    commodity.getNumber()
+            };
+        }
+
+// 创建商品列表表格
+        String[] columnNames = {"商品编号", "商品名称", "商品类型","价格","进价","供应商","剩余数量"};
+        productTable = new JTable(dataArray, columnNames);
+
+// 设置布局管理器为GridBagLayout
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 

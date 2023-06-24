@@ -78,6 +78,12 @@ public class Commodity {
 
     @Override
     public String toString() {
+        return "商品名称：'" + commodityName + '\'' +
+                " , 价格：" + price +
+                " , 购买数量：" + 1 ;
+    }
+
+    public String toDetailString() {
         return "Commodity{" +
                 "id='" + id + '\'' +
                 ", commodityName='" + commodityName + '\'' +

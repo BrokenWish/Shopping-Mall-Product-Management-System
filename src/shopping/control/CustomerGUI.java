@@ -1,17 +1,26 @@
 package shopping.control;
 
+import model.Commodity;
+import model.User;
+import service.AdministratorService;
+import service.impl.AdministratorsServiceImpl;
+import service.impl.UserServiceImpl;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.*;
 
 
 public class CustomerGUI extends JFrame{
-	private DefaultListModel<Product> productListModel;
-    private DefaultListModel<Product> cartListModel;
-    private double totalAmount;
+    private AdministratorsServiceImpl administratorService = new AdministratorsServiceImpl();
+
+	private DefaultListModel<Commodity> productListModel;
+    private DefaultListModel<Commodity> cartListModel;
+    private double totalAmount = 0.0;
     private JLabel totalAmountLabel;
     public CustomerGUI() {
         setTitle("用户界面");
@@ -32,20 +41,16 @@ public class CustomerGUI extends JFrame{
         productListLabel.setFont(new Font("黑体", Font.BOLD, 16));
         leftPanel.add(productListLabel, BorderLayout.NORTH);
 
-      
+        List<Commodity> commodityList = administratorService.listCommodities();
 
         // 创建商品列表的数据
-        Product[] productList = {
-                new Product("商品1", 10),
-                new Product("商品2", 14),
-                new Product("商品3", 15),
-                new Product("商品4",16),
-                new Product("商品5",17)
-        };
+
+
+
 
         // 创建商品列表组件
         productListModel = new DefaultListModel<>();
-        JList<Product> productListUI = new JList<>(productListModel);
+        JList<Commodity> productListUI = new JList<>(productListModel);
 
         // 创建商品列表面板
         JPanel productListPanel = new JPanel(new BorderLayout());
@@ -59,17 +64,17 @@ public class CustomerGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 JButton button = (JButton) e.getSource();
-                Product product =  (Product) button.getClientProperty("product");
+                Commodity product =  (Commodity) button.getClientProperty("Commodity");
                 addToCart(product);
             }
         };
 
         // 添加商品列表和加号按钮
-        for (Product product : productList) {
+        for (Commodity commodity : commodityList) {
             JButton addButton = new JButton("+");
-            addButton.putClientProperty("product", product);
+            addButton.putClientProperty("Commodity", commodity);
             addButton.addActionListener(addButtonListener);
-            productPanel.add(new JLabel(product.getName() + "   ￥" + product.getPrice()));
+            productPanel.add(new JLabel(commodity.getCommodityName() + "  ￥" + commodity.getPrice()+ "  剩余数量:" + commodity.getNumber()));
             productPanel.add(addButton);
         }
 
@@ -89,7 +94,7 @@ public class CustomerGUI extends JFrame{
 
         // 创建购物车商品列表组件
         cartListModel = new DefaultListModel<>();
-        JList<Product> cartListUI = new JList<>(cartListModel);
+        JList<Commodity> cartListUI = new JList<>(cartListModel);
         rightPanel.add(new JScrollPane(cartListUI), BorderLayout.CENTER);
 
         // 创建减号按钮的监听器
@@ -97,7 +102,7 @@ public class CustomerGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 JButton button = (JButton) e.getSource();
-                Product product = (Product) button.getClientProperty("product");
+                Commodity product = (Commodity) button.getClientProperty("product");
                 removeFromCart(product);
             }
         };
@@ -109,7 +114,7 @@ public class CustomerGUI extends JFrame{
 
         // 创建总金额和确认按钮面板
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel totalAmountLabel = new JLabel("总金额：");
+        totalAmountLabel = new JLabel("总金额：");
      
         JButton confirmButton = new JButton("支付");
         confirmButton.addActionListener(new ActionListener() {
@@ -131,13 +136,13 @@ public class CustomerGUI extends JFrame{
         setVisible(true);
     }
 
-    public void addToCart(Product product) {
+    public void addToCart(Commodity product) {
         cartListModel.addElement(product);
         totalAmount += product.getPrice();
         updateTotalAmountLabel();
     }
 
-    public void removeFromCart(Product product) {
+    public void removeFromCart(Commodity product) {
         cartListModel.removeElement(product);
         totalAmount -= product.getPrice();
         updateTotalAmountLabel();
@@ -154,26 +159,5 @@ public class CustomerGUI extends JFrame{
                 new CustomerGUI();
             }
   
-    private class Product {
-        private String name;
-        private double price;
 
-        public Product(String name, double price) {
-            this.name = name;
-            this.price = price;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public double getPrice() {
-            return price;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
 }

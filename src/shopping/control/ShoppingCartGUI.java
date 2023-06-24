@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class ShoppingCartGUI extends JFrame implements ActionListener{
-    private AdministratorService administratorService = new AdministratorsServiceImpl();
+    private AdministratorsServiceImpl administratorService = new AdministratorsServiceImpl();
 
 	 private JLabel role,account,password;//三个标签 用户身份 用户账号 密码
 	 private JTextField usernameField;//文本框
@@ -78,7 +78,7 @@ public class ShoppingCartGUI extends JFrame implements ActionListener{
                 String account=new String (usernameField.getText());
                 String password=new String(passwordField.getPassword());
                 Customer customer = administratorService.findCustomerByAccount(account);
-                if(account == null||password == null || customer == null || !customer.getUserName().equals(account) || customer.getPassword().equals(password))
+                if(account == null||password == null || customer == null || !customer.getUserName().equals(account) || !customer.getPassword().equals(password))
                 {
                     JOptionPane.showMessageDialog(this, "登录失败");
                     return;
@@ -93,7 +93,7 @@ public class ShoppingCartGUI extends JFrame implements ActionListener{
                 String account=new String (usernameField.getText());
                 String password=new String(passwordField.getPassword());
                 Administrator administrator = administratorService.findAdministraotrByAccount(account);
-                if(account == null||password == null || administrator == null || !administrator.getUserName().equals(account) || administrator.getPassword().equals(password))
+                if(account == null||password == null || administrator == null || !administrator.getUserName().equals(account) || !administrator.getPassword().equals(password))
                 {
                     JOptionPane.showMessageDialog(this, "登录失败");
                     this.dispose();

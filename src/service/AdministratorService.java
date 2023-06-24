@@ -16,12 +16,10 @@ import java.util.List;
  */
 public interface AdministratorService {
     //增加
-    public void addCommodity(Commodity commodity);
+    public boolean addCommodity(Commodity commodity);
 
     //删除
-
-    //修改
-    public void modifyCommodity(Commodity commodity);
+    public boolean deleteCommodity(String commodityName);
 
     //查询用户
     public List<Customer> listCustomer();

@@ -70,8 +70,10 @@ public class UserServiceImpl implements UserService {
         List<Commodity> commodityList = new ArrayList<>();
 
         try {
-            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM commodity WHERE Commodity_name LIKE '%" + name + "%'");
+            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM commodity WHERE Commodity_name LIKE ?");
+            ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
+
 
             while (rs.next()) {
                 Commodity commodity = new Commodity();
@@ -152,14 +154,14 @@ public class UserServiceImpl implements UserService {
         return commodity;
     }
 
-    public static void main(String[] args) {
-        UserServiceImpl userService = new UserServiceImpl();
-
-        List<Commodity> list = userService.findByName("因");
-
-        for (Commodity commodity : list){
-            System.out.println(commodity.getCommodityName());
-        }
-
-    }
+//    public static void main(String[] args) {
+//        UserServiceImpl userService = new UserServiceImpl();
+//
+//        List<Commodity> list = userService.findByName("鸦片");
+//
+//        for (Commodity commodity : list){
+//            System.out.println(commodity.toDetailString());
+//        }
+//
+//    }
 }

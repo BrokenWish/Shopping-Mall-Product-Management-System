@@ -1,13 +1,22 @@
 package shopping.control;
 
+import model.Customer;
+import service.AdministratorService;
+import service.CustomerService;
+import service.impl.AdministratorsServiceImpl;
+import service.impl.CustomerServiceImpl;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.*;
 
 
 public class RegisterFrame extends JFrame implements ActionListener{
+    private AdministratorsServiceImpl administratorService = new AdministratorsServiceImpl();
+    private CustomerServiceImpl customerService = new CustomerServiceImpl();
 
 	private JLabel account,password,espassword,telephone,name;//三个标签 用户身份 用户账号 密码
 	 private JTextField usernameField,phonenumber,namefield;//文本框
@@ -88,12 +97,26 @@ public class RegisterFrame extends JFrame implements ActionListener{
    		String account=usernameField.getText();
    		String telephone=phonenumber.getText();
    		String name=namefield.getText();
-   		//保存到静态变量窗口间共享
-   		Conf.account=account;
-   		Conf.password=password1;
-   		Conf.telephone=telephone;
-   		Conf.name=name;
-   		JOptionPane.showMessageDialog(this, "注册成功");
+
+        List<Customer> customerList = administratorService.listCustomer();
+        for (Customer customer : customerList) {
+            if (customer.getUserName().equals(account)){
+                JOptionPane.showMessageDialog(this, "账号名已存在");
+                return;
+            }else if(customer.getCusomerPhone().equals(telephone)){
+                JOptionPane.showMessageDialog(this, "该手机号已经注册");
+                return;
+            }
+        }
+
+        Customer customer = new Customer();
+        customer.setUserName(account);
+        customer.setCustomerName(name);
+        customer.setPassword(password1);
+        customer.setCusomerPhone(telephone);
+        customerService.createCustomer(customer);
+
+        JOptionPane.showMessageDialog(this, "注册成功");
    		
    	}
    	else if(e.getSource()==enterexit)

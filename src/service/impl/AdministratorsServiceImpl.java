@@ -19,7 +19,12 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
     private static int COMMODITY_ID;
 
     @Override
-    public void addCommodity(Commodity commodity) {
+    public boolean addCommodity(Commodity commodity) {
+        List<Commodity> byName = new AdministratorsServiceImpl().findByName(commodity.getCommodityName());
+
+        if (commodity.getCommodityName() == null || !byName.isEmpty()){
+            return false;
+        }
 
         try {
             PreparedStatement psc = MySQLUtils.getConn().prepareStatement("SELECT COUNT(*) FROM commodity");
@@ -60,12 +65,46 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return true;
     }
 
     @Override
-    public void modifyCommodity(Commodity commodity) {
+    public boolean deleteCommodity(String commodityName) {
+        List<Commodity> byName = new AdministratorsServiceImpl().findByName(commodityName);
 
+        if (commodityName == null || byName.isEmpty()){
+            return false;
+        }
+
+
+
+        Connection conn = MySQLUtils.getConn();
+        PreparedStatement ps = null;
+        try {
+
+
+
+            //创建prepareStatement对象
+            String sql = "DELETE FROM commodity WHERE Commodity_name=?";
+            ps = conn.prepareStatement(sql);
+            //执行sql语句
+            ps.setString(1, commodityName);
+
+
+            //java.util.Date utilDate = new java.util.Date();//进行类型转换，由util类型的date转化为sql类型的
+            //ps.execute();
+            // 执行
+            System.out.println(ps.execute());//执行表输出返回的结果，结果为false，因为没有返回的结果集
+
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
     }
+
 
     @Override
     public List<Customer> listCustomer() {
@@ -130,12 +169,10 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                administrator.setId(rs.getString("Customer_id"));
-                administrator.setAdministratorName(rs.getString("Customer_name"));
-                administrator.setUserName(rs.getString("Customer_account"));
-                administrator.setPassword(rs.getString("Customer_password"));
-                administrator.setPhone(rs.getString("Customer_phone"));
-
+                administrator.setId(rs.getString("Administrator_id"));
+                administrator.setAdministratorName(rs.getString("Administrator_name"));
+                administrator.setUserName(rs.getString("Administrator_account"));
+                administrator.setPassword(rs.getString("Administrator_password"));
 
             }
             rs.close();

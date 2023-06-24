@@ -1,14 +1,9 @@
 package service.impl;
 
-import model.Commodity;
-import model.MySQLUtils;
-import model.Supplier;
+import model.*;
 import service.CustomerService;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +15,8 @@ import java.util.List;
  * @Projrct Shopping-Mall-Product-Management-System
  */
 public class CustomerServiceImpl extends UserServiceImpl implements CustomerService {
+
+    private static int CUSTOMERID;
 
     @Override
     public List<Commodity> listShoppingCart(String customerId) {
@@ -61,13 +58,52 @@ public class CustomerServiceImpl extends UserServiceImpl implements CustomerServ
         return commodityList;
     }
 
-    public static void main(String[] args) {
-        CustomerService customerService = new CustomerServiceImpl();
-
-        List<Commodity> commodityList = customerService.listShoppingCart("2001");
-
-        for (Commodity commodity : commodityList){
-            System.out.println(commodity.getCommodityName());
+    @Override
+    public void createCustomer(Customer customer) {
+        try {
+            PreparedStatement psc = MySQLUtils.getConn().prepareStatement("SELECT COUNT(*) FROM customer");
+            ResultSet rs = psc.executeQuery();
+            if (rs.next()) {
+                CUSTOMERID = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+
+
+        try {
+            Connection conn = MySQLUtils.getConn();
+            PreparedStatement ps = null;
+
+
+                //创建prepareStatement对象
+                String sql = "insert into customer values (?,?,?,?,?)";
+                ps = conn.prepareStatement(sql);
+                //执行sql语句
+                ps.setString(1, String.valueOf("200" + ++CUSTOMERID));
+                ps.setString(2,customer.getCustomerName());
+                ps.setString(3,customer.getCusomerPhone());
+                ps.setString(4,customer.getUserName());
+                ps.setString(5,customer.getPassword());
+
+
+            System.out.println(ps.execute());
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
     }
+
+//    public static void main(String[] args) {
+//        CustomerService customerService = new CustomerServiceImpl();
+//
+//        List<Commodity> commodityList = customerService.listShoppingCart("2001");
+//
+//        for (Commodity commodity : commodityList){
+//            System.out.println(commodity.getCommodityName());
+//        }
+//    }
 }
