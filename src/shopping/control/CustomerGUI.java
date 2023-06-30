@@ -1,7 +1,6 @@
 package shopping.control;
 
 import model.Commodity;
-import model.Order;
 import model.Supplier;
 import model.User;
 import service.AdministratorService;
@@ -11,20 +10,22 @@ import service.impl.UserServiceImpl;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.*;
-
 
 public class CustomerGUI extends JFrame{
     private AdministratorsServiceImpl administratorService = new AdministratorsServiceImpl();
 
 	private DefaultListModel<Commodity> productListModel;
     private DefaultListModel<Commodity> cartListModel;
+    private Map<Commodity, Integer> cartMap;
     private double totalAmount = 0.0;
     private JLabel totalAmountLabel;
-    public CustomerGUI(String customerId) {
+    public CustomerGUI() {
         setTitle("用户界面");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 400);
@@ -45,7 +46,9 @@ public class CustomerGUI extends JFrame{
 
         List<Commodity> commodityList = administratorService.listCommodities();
 
+
         // 创建商品列表的数据
+
 
         // 创建商品列表组件
         productListModel = new DefaultListModel<>();
@@ -59,6 +62,33 @@ public class CustomerGUI extends JFrame{
         JPanel productPanel = new JPanel(new GridLayout(0, 2, 5, 5));
 
 
+        // 创建加号按钮的监听器
+        ActionListener addButtonListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JButton button = (JButton) e.getSource();
+                Commodity product =  (Commodity) button.getClientProperty("Commodity");
+                
+                addToCart(product);
+           
+            }
+        };
+
+        // 添加商品列表和加号按钮
+        for (Commodity commodity : commodityList) {
+            JButton addButton = new JButton("+");
+            addButton.putClientProperty("Commodity", commodity);
+            addButton.addActionListener(addButtonListener);
+            addButton.setPreferredSize(new Dimension(30,30));
+            productPanel.add(new JLabel(commodity.getCommodityName() + "  ￥" + commodity.getPrice()+ "  剩余数量:" + commodity.getNumber()));
+            productPanel.add(addButton);
+        }
+
+        // 将商品列表和加号按钮面板添加到左边面板
+    
+        leftPanel.add(productPanel, BorderLayout.CENTER);
+
+
         // 创建右边购物车面板
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.setBackground(Color.LIGHT_GRAY);
@@ -68,151 +98,159 @@ public class CustomerGUI extends JFrame{
         JLabel cartLabel = new JLabel("购物车");
         cartLabel.setFont(new Font("黑体", Font.BOLD, 16));
         rightPanel.add(cartLabel, BorderLayout.NORTH);
-
+        
         // 创建购物车商品列表组件
         cartListModel = new DefaultListModel<>();
         JList<Commodity> cartListUI = new JList<>(cartListModel);
-        rightPanel.add(new JScrollPane(cartListUI), BorderLayout.CENTER);
+     rightPanel.add(new JScrollPane(cartListUI), BorderLayout.CENTER);
+        
+        
+    // 创建减号按钮的监听器
+       ActionListener minusButtonListener = new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               JButton button = (JButton) e.getSource();
+               Commodity product = (Commodity) button.getClientProperty("Commodity");
+               removeFromCart(product);
+           }
+       };
 
-        // 添加商品列表和加号按钮
-        for (Commodity commodity : commodityList) {
-            JButton addButton= new JButton("+");
-            addButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    addToCart(commodity);
-                }
-            });
-            productPanel.add(new JLabel(commodity.getCommodityName() + "  ￥" + commodity.getPrice()+ "  剩余数量:" + commodity.getNumber()));
-            productPanel.add(addButton);
-        }
+       JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+       totalAmountLabel = new JLabel("总金额：");
 
-        // 将搜索面板和商品列表和加号按钮面板添加到左边面板
-    
-        leftPanel.add(productPanel, BorderLayout.CENTER);
+       JButton confirmButton = new JButton("支付");
+       confirmButton.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+               try {
+                   for (Map.Entry<Commodity, Integer> entry : cartMap.entrySet()) {
+                       Commodity commodity = entry.getKey();
+                       int quantity = entry.getValue();
+                       System.out.println(commodity.toDetailString() + " 数量：" + quantity);
+                       modify(commodity, quantity);
+                   }
+                   refreshGUI();
+                   JOptionPane.showMessageDialog(null, "订单支付成功！");
+                 //  new OrderGUI(Customer.getCustomerId()) ;
+               } catch (Exception ex) {
+                   ex.printStackTrace();
+                   JOptionPane.showMessageDialog(null, "An error occurred while processing the order.");
+               }
+           }
+       });
+       bottomPanel.add(totalAmountLabel);
+       bottomPanel.add(confirmButton);
+       rightPanel.add(bottomPanel, BorderLayout.SOUTH);
 
+       // 添加商品列表和加号按钮
+       cartMap = new HashMap<>();
+       for (Commodity commodity : commodityList) {
+           JButton addButton = new JButton("+");
+           addButton.addActionListener(new ActionListener() {
+               @Override
+               public void actionPerformed(ActionEvent e) {
+                   addToCart(commodity);
+               }
+           });
+           productPanel.add(new JLabel(commodity.getCommodityName() + "  ￥" + commodity.getPrice() + "  剩余数量:" + commodity.getNumber()));
+           productPanel.add(addButton);
+       }
 
-        // 创建减号按钮的监听器
-        ActionListener minusButtonListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton button = (JButton) e.getSource();
-                Commodity product = (Commodity) button.getClientProperty("product");
-                removeFromCart(product);
-            }
-        };
+       // 将搜索面板和商品列表和加号按钮面板添加到左边面板
+       leftPanel.add(productPanel, BorderLayout.CENTER);
 
-        // 创建减号按钮
-        JButton minusButton = new JButton("-");
-        minusButton.addActionListener(minusButtonListener);
-        rightPanel.add(minusButton, BorderLayout.SOUTH);
+       // 将左边面板和右边面板添加到主面板
+       mainPanel.add(leftPanel, BorderLayout.WEST);
+       mainPanel.add(rightPanel, BorderLayout.EAST);
 
-        // 创建总金额和确认按钮面板
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        totalAmountLabel = new JLabel("总金额：");
-     
-        JButton confirmButton = new JButton("支付");
-        confirmButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+       // 将主面板添加到主窗口中
+       add(mainPanel);
+       setVisible(true);
+   }
 
-                try {
-                    for (int i = 0; i < cartListModel.getSize(); i++) {
-                        System.out.println(commodityList.get(i).toDetailString());
-                        modify(commodityList.get(i));
-                    }
-                    new CustomerGUI(customerId);
+   public void addToCart(Commodity commodity) {
+       if (cartMap.containsKey(commodity)) {
+           int quantity = cartMap.get(commodity);
+           if (quantity < commodity.getNumber()) {
+               cartMap.put(commodity, quantity + 1);
+               totalAmount += commodity.getPrice();
+               updateTotalAmountLabel();
+           } else {
+               JOptionPane.showMessageDialog(null, "商品数量不足！");
+           }
+       } else {
+           cartMap.put(commodity, 1);
+           totalAmount += commodity.getPrice();
+           updateTotalAmountLabel();
+       }
+       refreshCartList();
+   }
 
-                    Order order = new Order();
+   public void removeFromCart(Commodity commodity) {
+       if (cartMap.containsKey(commodity)) {
+           int quantity = cartMap.get(commodity);
+           if (quantity > 1) {
+               cartMap.put(commodity, quantity - 1);
+               totalAmount -= commodity.getPrice();
+           } else {
+               cartMap.remove(commodity);
+               totalAmount -= commodity.getPrice();
+           }
+           updateTotalAmountLabel();
+           refreshCartList();
+       }
+   }
 
+   public void updateTotalAmountLabel() {
+       totalAmountLabel.setText("总金额：" + String.format("%.2f", totalAmount));
+   }
 
+   public void refreshCartList() {
+       cartListModel.clear();
+       for (Map.Entry<Commodity, Integer> entry : cartMap.entrySet()) {
+           Commodity commodity = entry.getKey();
+           int quantity = entry.getValue();
+           cartListModel.removeElement(commodity.getCommodityName() + "  数量：" + quantity);
+       }
+   }
 
-                    administratorService.createOrder(order);
-                    new OrderGUI(customerId);
+   public void refreshGUI() {
+       // 重新获取商品列表
+       List<Commodity> commodityList = administratorService.listCommodities();
 
+       // 清空现有的商品列表模型
+       productListModel.clear();
+       cartListModel.clear();
+       cartMap.clear();
 
+       // 重新添加商品到商品列表模型
+       for (Commodity commodity : commodityList) {
+           productListModel.addElement(commodity);
+       }
 
+       // 还需要清空购物车和总金额
+       totalAmount = 0.0;
+       updateTotalAmountLabel();
+   }
 
+   public void modify(Commodity commodity, int quantity) {
+       Commodity byId = administratorService.findById(commodity.getId());
+       int number = byId.getNumber();
 
-                    // update the existing GUI or create a new one here
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "An error occurred while processing the order.");
-                }
-            }
-        });
-        bottomPanel.add(totalAmountLabel);
- 
-        bottomPanel.add(confirmButton);
-        rightPanel.add(bottomPanel, BorderLayout.SOUTH);
+       Commodity modifycommodity = new Commodity();
+       modifycommodity.setId(commodity.getId());
+       modifycommodity.setNumber(number - quantity);
 
-        // 将左边面板和右边面板添加到主面板
-        mainPanel.add(leftPanel, BorderLayout.WEST);
-        mainPanel.add(rightPanel, BorderLayout.EAST);
+       boolean success = administratorService.modifyCommodity(modifycommodity);
 
-        // 将主面板添加到主窗口中
-        add(mainPanel);
-        setVisible(true);
-    }
+       if (success) {
+           System.out.println("修改商品库存数量成功！");
+       } else {
+           System.out.println("修改商品库存数量失败！");
+       }
+   }
 
-    public void addToCart(Commodity commodity) {
-        cartListModel.addElement(commodity);
-        totalAmount += commodity.getPrice();
-        updateTotalAmountLabel();
-    }
-
-    public void removeFromCart(Commodity product) {
-        cartListModel.removeElement(product);
-        totalAmount -= product.getPrice();
-        updateTotalAmountLabel();
-    }
-
-    public void updateTotalAmountLabel() {
-        totalAmountLabel.setText("总金额：" + String.format("%.2f", totalAmount));
-    }
-
-    public void refreshGUI() {
-        // 重新获取商品列表
-        List<Commodity> commodityList = administratorService.listCommodities();
-
-        // 清空现有的商品列表模型
-        productListModel.clear();
-        cartListModel.clear();
-
-        // 重新添加商品到商品列表模型
-        for (Commodity commodity : commodityList) {
-            productListModel.addElement(commodity);
-        }
-
-        // 还需要清空购物车和总金额
-        totalAmount = 0.0;
-        updateTotalAmountLabel();
-    }
-
-    public void modify(Commodity commodity){
-        Commodity byId = administratorService.findById(commodity.getId());
-        int number = byId.getNumber();
-
-        Commodity modifycommodity = new Commodity();
-        modifycommodity.setId(commodity.getId());
-        modifycommodity.setNumber(--number);
-
-        boolean success = administratorService.modifyCommodity(modifycommodity);
-
-        if (success) {
-//            List<Commodity> commodityList = administratorService.listCommodities();
-//            for (Commodity c : commodityList) {
-//                System.out.println(c.toDetailString());
-//            }
-        } else {
-            System.out.println("修改商品库存数量失败！");
-        }
-    }
-
-   
-//    public static void main(String[] args) {
-//
-//                new CustomerGUI();
-//            }
-  
-
+  public static void main(String[] args) {
+       new CustomerGUI();
+   }
 }
+  
