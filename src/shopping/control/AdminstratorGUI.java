@@ -202,14 +202,14 @@ public class AdminstratorGUI extends JFrame {
 
      // 添加查找文本框到窗口的左上角
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 5;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(searchField, gbc);
 
         // 添加查找按钮到窗口的左上角
         gbc.gridx = 1;
-        gbc.gridy = 3;
+        gbc.gridy = 5;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(searchButton, gbc);
