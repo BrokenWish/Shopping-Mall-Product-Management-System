@@ -192,6 +192,16 @@ public class AdminstratorGUI extends JFrame {
                     commodity.getNumber()
             };
         }
+     // 创建查看客户订单按钮
+        JButton viewOrdersButton = new JButton("查看客户订单");
+        viewOrdersButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // 在这里处理查看客户订单的逻辑
+                // 可以打开一个新的窗口或对话框来显示客户订单信息
+                // 也可以执行相应的数据库操作来获取客户订单数据并显示在界面上
+                System.out.println("查看客户订单");
+            }
+        });
 
 // 创建商品列表表格
         String[] columnNames = {"商品编号", "商品名称", "商品类型","价格","进价","供应商","剩余数量"};
@@ -200,17 +210,24 @@ public class AdminstratorGUI extends JFrame {
 // 设置布局管理器为GridBagLayout
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        
+     // 添加查看客户订单按钮到窗口的左上角
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        add(viewOrdersButton, gbc);
 
      // 添加查找文本框到窗口的左上角
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(searchField, gbc);
 
         // 添加查找按钮到窗口的左上角
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(searchButton, gbc);
@@ -245,80 +262,6 @@ public class AdminstratorGUI extends JFrame {
         gbc.weighty = 1.0;
         gbc.insets = new Insets(10, 0, 10, 10);
         add(new JScrollPane(productTable), gbc);
-
-        // 创建修改按钮
-        JButton updateButton = new JButton("修改商品");
-        updateButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // 获取选中的行索引
-                int selectedRow = productTable.getSelectedRow();
-                if (selectedRow == -1) {
-                    JOptionPane.showMessageDialog(AdminstratorGUI.this, "请先选择要修改的商品", "提示", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
-                // 获取选中行的商品编号
-                String productId = productTable.getValueAt(selectedRow, 0).toString();
-
-                // 弹出输入对话框，要求输入修改后的商品信息
-                JTextField numField = new JTextField(productTable.getValueAt(selectedRow, 0).toString());
-                JTextField nameField = new JTextField(productTable.getValueAt(selectedRow, 1).toString());
-                JTextField kindField = new JTextField(productTable.getValueAt(selectedRow, 2).toString());
-                JTextField priceField = new JTextField(productTable.getValueAt(selectedRow, 3).toString());
-                JTextField costField = new JTextField(productTable.getValueAt(selectedRow, 4).toString());
-                JTextField companyField = new JTextField(productTable.getValueAt(selectedRow, 5).toString());
-                JTextField remainField = new JTextField(productTable.getValueAt(selectedRow, 6).toString());
-
-                Object[] message = {
-                        "商品编号:",numField,
-                        "商品名称:", nameField,
-                        "商品类型:", kindField,
-                        "价格:", priceField,
-                        "成本:", costField,
-                        "公司名称:", companyField,
-                        "剩余数量:", remainField,
-                };
-
-                int option = JOptionPane.showConfirmDialog(AdminstratorGUI.this, message, "修改商品", JOptionPane.OK_CANCEL_OPTION);
-                if (option == JOptionPane.OK_OPTION) {
-                    String num = numField.getText();
-                    String name = nameField.getText();
-                    String kind = kindField.getText();
-                    double price = Double.parseDouble(priceField.getText());
-                    double cost = Double.parseDouble(costField.getText());
-                    String company = companyField.getText();
-                    double remain = Double.parseDouble(remainField.getText());
-
-                    // 在这里处理修改商品的逻辑
-                    System.out.println("修改商品：" + productId + "商品编号:" + num +"商品名称:" + name + "商品类型:" + kind + "价格：" + price + "，成本：" + cost + "公司名称：" + company + "剩余数量：" + remain);
-                }
-            }
-        });
-
-        // 创建查看客户订单按钮
-        JButton viewOrdersButton = new JButton("查看客户订单");
-        viewOrdersButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // 在这里处理查看客户订单的逻辑
-                // 可以打开一个新的窗口或对话框来显示客户订单信息
-                // 也可以执行相应的数据库操作来获取客户订单数据并显示在界面上
-                System.out.println("查看客户订单");
-            }
-        });
-
-        // 添加查看客户订单按钮到窗口的左上角
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        add(viewOrdersButton, gbc);
-
-        // 添加修改按钮到窗口的左上角
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        add(updateButton, gbc);
 
         Dimension size=Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth=(int) size.getWidth();
