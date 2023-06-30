@@ -11,6 +11,9 @@ import service.impl.UserServiceImpl;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -80,11 +83,14 @@ public class CustomerGUI extends JFrame{
             addButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    int buyNum = commodity.getBuyNum();
+                    commodity.setBuyNum(buyNum++);
                     addToCart(commodity);
                 }
             });
             productPanel.add(new JLabel(commodity.getCommodityName() + "  ￥" + commodity.getPrice()+ "  剩余数量:" + commodity.getNumber()));
             productPanel.add(addButton);
+
         }
 
         // 将搜索面板和商品列表和加号按钮面板添加到左边面板
@@ -112,24 +118,32 @@ public class CustomerGUI extends JFrame{
         totalAmountLabel = new JLabel("总金额：");
      
         JButton confirmButton = new JButton("支付");
+        String s = generateOrderNumber();
         confirmButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
                 try {
                     for (int i = 0; i < cartListModel.getSize(); i++) {
-                        System.out.println(commodityList.get(i).toDetailString());
-                        modify(commodityList.get(i));
+                        Commodity commodity = commodityList.get(i);
+                        System.out.println(commodity.toDetailString());
+                        modify(commodity);
+
+                        List<Commodity> commodities = new ArrayList<>();
+                        Order order = new Order();
+                        order.setCustomerId(customerId);
+
+                        order.setOrderTime(LocalDateTime.now());
+                        order.setOrderNum(commodity.getBuyNum());
+                        order.setOrderId(s);
+                        commodities.add(commodity);
+                        order.setCommodityList(commodities);
+
+
+                        administratorService.createOrder(order);
                     }
                     new CustomerGUI(customerId);
 
-                    Order order = new Order();
-
-
-
-                    administratorService.createOrder(order);
-                    new OrderGUI(customerId);
-
-
+                    new OrderGUI(customerId,s);
 
 
 
@@ -155,7 +169,24 @@ public class CustomerGUI extends JFrame{
     }
 
     public void addToCart(Commodity commodity) {
-        cartListModel.addElement(commodity);
+        boolean isExistingCommodity = false;
+        for (int i = 0; i < cartListModel.getSize(); i++) {
+            Commodity existingCommodity = cartListModel.getElementAt(i);
+            if (existingCommodity.getCommodityName().equals(commodity.getCommodityName())) {
+                Commodity commodity1 = existingCommodity;
+                // 如果存在相同名称的商品，则将其数量属性加1
+                commodity1.setBuyNum(existingCommodity.getBuyNum() + 1);
+                cartListModel.addElement(commodity1);
+                cartListModel.removeElement(existingCommodity);
+                isExistingCommodity = true;
+                break;
+            }
+        }
+
+        // 检查购物车列表中是否已经存在相同名称的商品
+        if (!isExistingCommodity) {
+            cartListModel.addElement(commodity);
+        }
         totalAmount += commodity.getPrice();
         updateTotalAmountLabel();
     }
@@ -170,23 +201,19 @@ public class CustomerGUI extends JFrame{
         totalAmountLabel.setText("总金额：" + String.format("%.2f", totalAmount));
     }
 
-    public void refreshGUI() {
-        // 重新获取商品列表
-        List<Commodity> commodityList = administratorService.listCommodities();
+        public static String generateOrderNumber() {
+            // 获取当前时间戳
+            long timestamp = System.currentTimeMillis();
 
-        // 清空现有的商品列表模型
-        productListModel.clear();
-        cartListModel.clear();
+            // 生成一个随机数
+            int randomNumber = (int) (Math.random() * 10000);
 
-        // 重新添加商品到商品列表模型
-        for (Commodity commodity : commodityList) {
-            productListModel.addElement(commodity);
+            // 将时间戳和随机数组合起来创建订单号
+            String orderNumber = timestamp + "-" + randomNumber;
+
+            return orderNumber;
         }
 
-        // 还需要清空购物车和总金额
-        totalAmount = 0.0;
-        updateTotalAmountLabel();
-    }
 
     public void modify(Commodity commodity){
         Commodity byId = administratorService.findById(commodity.getId());
@@ -194,25 +221,26 @@ public class CustomerGUI extends JFrame{
 
         Commodity modifycommodity = new Commodity();
         modifycommodity.setId(commodity.getId());
-        modifycommodity.setNumber(--number);
+        modifycommodity.setNumber(number - commodity.getBuyNum()  );
 
         boolean success = administratorService.modifyCommodity(modifycommodity);
 
         if (success) {
-//            List<Commodity> commodityList = administratorService.listCommodities();
-//            for (Commodity c : commodityList) {
-//                System.out.println(c.toDetailString());
-//            }
+            List<Commodity> commodityList = administratorService.listCommodities();
+            for (Commodity c : commodityList) {
+                System.out.println(c.toDetailString());
+            }
         } else {
             System.out.println("修改商品库存数量失败！");
         }
     }
 
    
-//    public static void main(String[] args) {
-//
-//                new CustomerGUI();
-//            }
+    public static void main(String[] args) {
+
+                new CustomerGUI("2002");
+//        System.out.println(generateOrderNumber());
+            }
   
 
 }

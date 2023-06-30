@@ -6,10 +6,11 @@ import model.Order;
 import model.Supplier;
 import service.UserService;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -157,33 +158,49 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createOrder(Order order) {
-//        try {
-//            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("INSERT INTO order VALUES()");
-//            ResultSet rs = ps.executeQuery();
-//
-//            while (rs.next()) {
-//
-//                PreparedStatement vendorPs = MySQLUtils.getConn().prepareStatement("SELECT * FROM vendor WHERE Vendor_name=?");
-//                vendorPs.setString(1, string);
-//                ResultSet vendorData = vendorPs.executeQuery();
-//
-//                Supplier supplier = new Supplier();
-//                while (vendorData.next()) {
-//                    supplier.setSupplierName(vendorData.getString("Vendor_name"));
-//                    supplier.setId(vendorData.getString("Vendor_id"));
-//                    supplier.setTeltphone(vendorData.getString("Vendor_phone"));
-//                }
-//
-//                commodity.setSupplier(supplier);
-//
-//                vendorData.close();
-//                vendorPs.close();
-//            }
-//            rs.close();
-//            ps.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            // 创建数据库连接
+            Connection connection = MySQLUtils.getConn();
+
+            List<Commodity> commodityList = order.getCommodityList();
+
+            for (Commodity commodity : commodityList) {
+                try{
+
+                    // 创建插入订单数据的SQL语句
+                    String sql = "INSERT INTO `order` VALUES (?, ?, ?, ?, ?, ?, ? )";
+
+                    // 创建PreparedStatement对象
+                    PreparedStatement statement = connection.prepareStatement(sql);
+
+                    // 设置参数值
+                    statement.setString(1, order.getCustomerId());
+                    statement.setString(2, commodity.getId());
+                    statement.setString(3, commodity.getCommodityName());
+                    statement.setInt(4, order.getOrderNum());
+                    Date date = new Date();     //先获取一个Date对象
+                    DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");   //创建一个格式化日期对象
+                    String format = simpleDateFormat.format(date);
+
+
+                    statement.setString(5, format);
+                    statement.setFloat(6, (float) commodity.getPrice());
+                    statement.setString(7, order.getOrderId());
+
+                    // 执行插入操作
+                    statement.execute();
+
+                    // 关闭连接和语句对象
+                    statement.close();
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 //    public static void main(String[] args) {

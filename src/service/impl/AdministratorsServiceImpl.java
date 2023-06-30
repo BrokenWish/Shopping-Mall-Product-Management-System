@@ -6,6 +6,8 @@ import shopping.control.AdminstratorGUI;
 
 import javax.swing.*;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -261,12 +263,13 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
             PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM `order`");
             ResultSet rs = ps.executeQuery();
 
+            DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             while (rs.next()) {
                 Order order = new Order();
                 order.setOrderId(rs.getString("Order_id"));
                 order.setOrderNum(rs.getInt("Order_number"));
-                Timestamp timestamp = rs.getTimestamp("Order_time");
-                order.setOrderTime(timestamp.toLocalDateTime());
+                String timestamp = rs.getString("Order_time");
+                order.setOrderTime(LocalDateTime.parse(timestamp, formatter2));
                 order.setCustomerId(rs.getString("Customer_id"));
 
                 orderList.add(order);
@@ -282,14 +285,15 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
     }
 
     @Override
-    public Order findOrderById(String customerId) {
+    public Order findOrderById(String customerId,String OrderId) {
         Order order = new Order();
         List<Commodity> commodityList = new ArrayList<>();
 
 
         try {
-            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM `order` WHERE Customer_id=?");
+            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM `order` WHERE Customer_id=? AND Order_id=?");
             ps.setString(1, customerId);
+            ps.setString(2, OrderId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -318,13 +322,13 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
         return order;
     }
 
-    public static void main(String[] args) {
-        AdministratorsServiceImpl administratorService = new AdministratorsServiceImpl();
-
-        Order orderById = administratorService.findOrderById("2001");
-
-        System.out.println(orderById.toString());
-
-    }
+//    public static void main(String[] args) {
+//        AdministratorsServiceImpl administratorService = new AdministratorsServiceImpl();
+//
+//        Order orderById = administratorService.findOrderById("2001");
+//
+//        System.out.println(orderById.toString());
+//
+//    }
 
 }

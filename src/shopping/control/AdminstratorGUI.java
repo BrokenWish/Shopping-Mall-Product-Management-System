@@ -25,6 +25,7 @@ public class AdminstratorGUI extends JFrame {
         // 设置窗口标题
         setTitle("商城系统管理");
 
+
         // 创建标题标签
         titleLabel = new JLabel("商品列表");
         titleLabel.setFont(new Font("黑体", Font.BOLD, 20));

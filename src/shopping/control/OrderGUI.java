@@ -37,7 +37,7 @@ public class OrderGUI extends JFrame {
     private JList<String> productList = new JList<>(model);
     private JButton commitButton;
 
-    public OrderGUI(String customerId) {
+    public OrderGUI(String customerId,String OrderId) {
         setTitle("订单界面");
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = size.width;
@@ -64,7 +64,7 @@ public class OrderGUI extends JFrame {
 
 
         double sum = 0;
-        Order orderById = administratorsService.findOrderById(customerId);
+        Order orderById = administratorsService.findOrderById(customerId,OrderId);
         List<Commodity> commodityList = orderById.getCommodityList();
         for (Commodity commodity : commodityList) {
             DefaultListModel<String> model = (DefaultListModel<String>) productList.getModel();
@@ -123,9 +123,9 @@ public class OrderGUI extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new OrderGUI("2001");
-    }
+//    public static void main(String[] args) {
+//        new OrderGUI("2001",);
+//    }
 
 
 }

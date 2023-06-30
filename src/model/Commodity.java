@@ -19,6 +19,7 @@ public class Commodity {
     private double cost;//进价
     private Supplier supplier;//供应商
     private int number;//剩余数量
+    private int buyNum = 1;
 
     public String getId() {
         return id;
@@ -76,11 +77,19 @@ public class Commodity {
         this.number = number;
     }
 
+    public int getBuyNum() {
+        return buyNum;
+    }
+
+    public void setBuyNum(int buyNum) {
+        this.buyNum = buyNum;
+    }
+
     @Override
     public String toString() {
         return "商品名称：'" + commodityName + '\'' +
                 " , 价格：" + price +
-                " , 购买数量：" + 1 ;
+                " , 购买数量：" + buyNum;
     }
 
     public String toDetailString() {
@@ -92,6 +101,7 @@ public class Commodity {
                 ", cost=" + cost +
                 ", supplier=" + supplier.getSupplierName() +
                 ", number=" + number +
+                ", buyNum=" + buyNum +
                 '}';
     }
 }

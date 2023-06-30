@@ -41,5 +41,5 @@ public interface AdministratorService {
     public List<Order> listOrder();
 
     //根据用户名查订单
-    public Order findOrderById(String customerId);
+    public Order findOrderById(String customerId,String orderId);
 }
