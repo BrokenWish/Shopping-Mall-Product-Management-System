@@ -256,10 +256,49 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
         return orderList;
     }
 
+    @Override
+    public Order findOrderById(String customerId) {
+        Order order = new Order();
+        List<Commodity> commodityList = new ArrayList<>();
+
+
+        try {
+            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM `order` WHERE Customer_id=?");
+            ps.setString(1, customerId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Commodity commodity = new Commodity();
+                commodity.setId(rs.getString("Commodity_id"));
+                commodity.setCommodityName(rs.getString("Commodity_name"));
+                commodity.setNumber(rs.getInt("Order_number"));
+                commodityList.add(commodity);
+
+                order.setCommodityList(commodityList);
+
+                order.setOrderId(rs.getString("Order_id"));
+                Timestamp timestamp = rs.getTimestamp("Order_time");
+                order.setOrderTime(timestamp.toLocalDateTime());
+                order.setCustomerId(rs.getString("Customer_id"));
+
+
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return order;
+    }
+
     public static void main(String[] args) {
         AdministratorsServiceImpl administratorService = new AdministratorsServiceImpl();
 
+        Order orderById = administratorService.findOrderById("2001");
 
+        System.out.println(orderById.toString());
 
     }
 

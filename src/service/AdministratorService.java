@@ -36,4 +36,6 @@ public interface AdministratorService {
 
     //查询所有用户的订单
     public List<Order> listOrder();
+
+    public Order findOrderById(String customerId);
 }

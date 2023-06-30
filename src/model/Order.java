@@ -2,6 +2,7 @@ package model;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Broken wish
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
  */
 public class Order {
     private String customerId;
-    private Commodity commodity;
+    private List<Commodity> commodityList;
     private int orderNum;
     private LocalDateTime orderTime;
     private String orderId;
@@ -25,12 +26,12 @@ public class Order {
         this.customerId = customerId;
     }
 
-    public Commodity getCommodity() {
-        return commodity;
+    public List<Commodity> getCommodityList() {
+        return commodityList;
     }
 
-    public void setCommodity(Commodity commodity) {
-        this.commodity = commodity;
+    public void setCommodityList(List<Commodity> commodityList) {
+        this.commodityList = commodityList;
     }
 
     public int getOrderNum() {
@@ -60,12 +61,19 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" +
+        String str = "Order{" +
                 "customerId='" + customerId + '\'' +
                 ", orderNum=" + orderNum +
                 ", orderTime=" + orderTime +
                 ", orderId='" + orderId + '\'' +
                 '}';
+
+        for (Commodity commodity : commodityList) {
+            str += commodity.getCommodityName() + " " + commodity.getNumber();
+        }
+
+
+        return str;
     }
 
 }

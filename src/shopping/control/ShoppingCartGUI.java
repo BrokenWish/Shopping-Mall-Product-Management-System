@@ -84,7 +84,7 @@ public class ShoppingCartGUI extends JFrame implements ActionListener{
                     return;
                 } else if (customer.getUserName().equals(account) && customer.getPassword().equals(password)){
                     JOptionPane.showMessageDialog(this, "登录成功");
-                    new CustomerGUI();
+                    new CustomerGUI(customer.getCustomerId());
                 }
 
 

@@ -23,7 +23,7 @@ public class CustomerGUI extends JFrame{
     private DefaultListModel<Commodity> cartListModel;
     private double totalAmount = 0.0;
     private JLabel totalAmountLabel;
-    public CustomerGUI() {
+    public CustomerGUI(String customerId) {
         setTitle("用户界面");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 400);
@@ -120,7 +120,7 @@ public class CustomerGUI extends JFrame{
                         System.out.println(commodityList.get(i).toDetailString());
                         modify(commodityList.get(i));
                     }
-                    new CustomerGUI();
+                    new CustomerGUI(customerId);
                     JOptionPane.showMessageDialog(null, "订单支付成功！");
                     // update the existing GUI or create a new one here
                 } catch (Exception ex) {
@@ -198,10 +198,10 @@ public class CustomerGUI extends JFrame{
     }
 
    
-    public static void main(String[] args) {
-
-                new CustomerGUI();
-            }
+//    public static void main(String[] args) {
+//
+//                new CustomerGUI();
+//            }
   
 
 }
