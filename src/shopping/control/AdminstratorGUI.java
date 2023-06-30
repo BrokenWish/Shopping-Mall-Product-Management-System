@@ -1,6 +1,7 @@
 package shopping.control;
 
 import model.Commodity;
+import model.Order;
 import model.Supplier;
 import service.AdministratorService;
 import service.impl.AdministratorsServiceImpl;
@@ -196,9 +197,9 @@ public class AdminstratorGUI extends JFrame {
         JButton viewOrdersButton = new JButton("查看客户订单");
         viewOrdersButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // 在这里处理查看客户订单的逻辑
-                // 可以打开一个新的窗口或对话框来显示客户订单信息
-                // 也可以执行相应的数据库操作来获取客户订单数据并显示在界面上
+                List<Order> orders = administratorsService.listOrder();
+
+                new UserOrderGUI(orders);
                 System.out.println("查看客户订单");
             }
         });

@@ -21,6 +21,7 @@ public class Commodity {
     private int number;//剩余数量
     private int buyNum = 1;
 
+
     public String getId() {
         return id;
     }

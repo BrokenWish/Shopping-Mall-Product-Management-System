@@ -123,24 +123,24 @@ public class CustomerGUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
                 try {
+
                     for (int i = 0; i < cartListModel.getSize(); i++) {
                         Commodity commodity = commodityList.get(i);
 //                        System.out.println(commodity.toDetailString());
                         modify(commodity);
-
                         List<Commodity> commodities = new ArrayList<>();
                         Order order = new Order();
                         order.setCustomerId(customerId);
-
                         order.setOrderTime(LocalDateTime.now());
                         order.setOrderNum(commodity.getBuyNum());
                         order.setOrderId(s);
+
                         commodities.add(commodity);
                         order.setCommodityList(commodities);
 
-
                         administratorService.createOrder(order);
                     }
+
                     new CustomerGUI(customerId);
 
                     new OrderGUI(customerId,s);
