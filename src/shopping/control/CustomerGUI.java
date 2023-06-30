@@ -121,7 +121,6 @@ public class CustomerGUI extends JFrame{
                         modify(commodityList.get(i));
                     }
                     new CustomerGUI(customerId);
-//                    JOptionPane.showMessageDialog(null, "订单创建成功！");
 
                     Order order = new Order();
 
@@ -129,6 +128,7 @@ public class CustomerGUI extends JFrame{
 
                     administratorService.createOrder(order);
                     new OrderGUI(customerId);
+
 
 
 

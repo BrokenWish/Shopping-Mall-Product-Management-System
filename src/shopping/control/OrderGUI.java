@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
@@ -82,6 +84,16 @@ public class OrderGUI extends JFrame {
         Customer customerByAccount = administratorsService.findCustomerByID(customerId);
         txtName.setText(customerByAccount.getCustomerName());
         txtName.setEditable(false);
+
+        commitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // 弹出支付成功的消息框
+                JOptionPane.showMessageDialog(OrderGUI.this, "支付成功！", "成功", JOptionPane.INFORMATION_MESSAGE);
+                // 关闭窗口
+                dispose();
+            }
+        });
 
 
         lblOrderNumber.setBounds(10,10,50,20);
