@@ -191,6 +191,16 @@ public class AdminstratorGUI extends JFrame {
                     commodity.getNumber()
             };
         }
+     // 创建查看客户订单按钮
+        JButton viewOrdersButton = new JButton("查看客户订单");
+        viewOrdersButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // 在这里处理查看客户订单的逻辑
+                // 可以打开一个新的窗口或对话框来显示客户订单信息
+                // 也可以执行相应的数据库操作来获取客户订单数据并显示在界面上
+                System.out.println("查看客户订单");
+            }
+        });
 
 // 创建商品列表表格
         String[] columnNames = {"商品编号", "商品名称", "商品类型","价格","进价","供应商","剩余数量"};
@@ -199,17 +209,24 @@ public class AdminstratorGUI extends JFrame {
 // 设置布局管理器为GridBagLayout
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        
+     // 添加查看客户订单按钮到窗口的左上角
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        add(viewOrdersButton, gbc);
 
      // 添加查找文本框到窗口的左上角
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(searchField, gbc);
 
         // 添加查找按钮到窗口的左上角
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(searchButton, gbc);
