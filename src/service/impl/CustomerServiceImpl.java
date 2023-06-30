@@ -61,10 +61,10 @@ public class CustomerServiceImpl extends UserServiceImpl implements CustomerServ
     @Override
     public void createCustomer(Customer customer) {
         try {
-            PreparedStatement psc = MySQLUtils.getConn().prepareStatement("SELECT COUNT(*) FROM customer");
+            PreparedStatement psc = MySQLUtils.getConn().prepareStatement("SELECT * FROM customer ORDER BY Customer_id DESC");
             ResultSet rs = psc.executeQuery();
             if (rs.next()) {
-                CUSTOMERID = rs.getInt(1);
+                CUSTOMERID = Integer.parseInt(rs.getString("Customer_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -81,7 +81,7 @@ public class CustomerServiceImpl extends UserServiceImpl implements CustomerServ
                 String sql = "insert into customer values (?,?,?,?,?)";
                 ps = conn.prepareStatement(sql);
                 //执行sql语句
-                ps.setString(1, String.valueOf("200" + ++CUSTOMERID));
+                ps.setString(1, String.valueOf( ++CUSTOMERID));
                 ps.setString(2,customer.getCustomerName());
                 ps.setString(3,customer.getCusomerPhone());
                 ps.setString(4,customer.getUserName());

@@ -93,7 +93,7 @@ public class AdminstratorGUI extends JFrame {
         deleteButton = new JButton("删除商品");
         deleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String input = JOptionPane.showInputDialog(AdminstratorGUI.this, "请输入要删除的商品编号", "删除商品", JOptionPane.PLAIN_MESSAGE);
+                String input = JOptionPane.showInputDialog(AdminstratorGUI.this, "请输入要删除的商名称", "删除商品", JOptionPane.PLAIN_MESSAGE);
                 if (input != null && !input.isEmpty()) {
                     // 在这里处理删除商品的逻辑
                     boolean success = administratorsService.deleteCommodity(input);
@@ -259,10 +259,9 @@ public class AdminstratorGUI extends JFrame {
     }
 
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(() -> {
-//            new AdminiistratorsGUI();
-//        });
-//    }
+    public static void main(String[] args) {
+            new AdminstratorGUI();
+
+    }
 }
 

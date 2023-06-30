@@ -114,6 +114,7 @@ public class RegisterFrame extends JFrame implements ActionListener{
         customer.setCustomerName(name);
         customer.setPassword(password1);
         customer.setCusomerPhone(telephone);
+
         customerService.createCustomer(customer);
 
         JOptionPane.showMessageDialog(this, "注册成功");

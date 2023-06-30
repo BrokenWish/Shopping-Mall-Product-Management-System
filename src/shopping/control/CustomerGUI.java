@@ -73,16 +73,6 @@ public class CustomerGUI extends JFrame{
         JList<Commodity> cartListUI = new JList<>(cartListModel);
         rightPanel.add(new JScrollPane(cartListUI), BorderLayout.CENTER);
 
-        // 创建加号按钮的监听器
-//        ActionListener addButtonListener = new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                JButton button = (JButton) e.getSource();
-//                Commodity product =  (Commodity) button.getClientProperty("Commodity");
-//                addToCart(product);
-//            }
-//        };
-
         // 添加商品列表和加号按钮
         for (Commodity commodity : commodityList) {
             JButton addButton= new JButton("+");

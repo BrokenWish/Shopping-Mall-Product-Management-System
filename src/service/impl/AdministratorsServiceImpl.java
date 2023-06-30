@@ -29,10 +29,10 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
         }
 
         try {
-            PreparedStatement psc = MySQLUtils.getConn().prepareStatement("SELECT COUNT(*) FROM commodity");
+            PreparedStatement psc = MySQLUtils.getConn().prepareStatement("SELECT * FROM commodity ORDER BY Commodity_id DESC");
             ResultSet rs = psc.executeQuery();
             if (rs.next()) {
-                COMMODITY_ID = rs.getInt(1);
+                COMMODITY_ID = Integer.parseInt(rs.getString("Commodity_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
