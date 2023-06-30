@@ -1,6 +1,7 @@
 package shopping.control;
 
 import model.Commodity;
+import model.Customer;
 import model.Order;
 import service.impl.AdministratorsServiceImpl;
 
@@ -25,9 +26,11 @@ public class OrderGUI extends JFrame {
     private JLabel lblOrderAmount;
     private JLabel lblOrderDetail;
     private JLabel lblSum;
+    private JLabel lblName;
     private JTextField txtOrderNumber;
     private JTextField txtOrderAmount;
     private JTextField txtSum;
+    private JTextField txtName;
     private DefaultListModel<String> model = new DefaultListModel<>();
     private JList<String> productList = new JList<>(model);
     private JButton commitButton;
@@ -48,10 +51,12 @@ public class OrderGUI extends JFrame {
         lblOrderNumber = new JLabel("订单号：");
         lblOrderAmount = new JLabel("下单时间：");
         lblOrderDetail = new JLabel("订单详情");
+        lblName = new JLabel("用户名：");
         lblSum = new JLabel("总金额：");
         txtOrderNumber = new JTextField(20);
         txtOrderAmount = new JTextField(20);
         txtSum = new JTextField("10");
+        txtName = new JTextField("15");
 
         commitButton = new JButton("支付订单");
 
@@ -74,22 +79,29 @@ public class OrderGUI extends JFrame {
         txtOrderAmount.setText(String.valueOf(orderById.getOrderTime()));
         txtOrderAmount.setEditable(false);
 
+        Customer customerByAccount = administratorsService.findCustomerByID(customerId);
+        txtName.setText(customerByAccount.getCustomerName());
+        txtName.setEditable(false);
 
 
         lblOrderNumber.setBounds(10,10,50,20);
         lblOrderAmount.setBounds(10,40,90,20);
-        lblOrderDetail.setBounds(10,70,110,20);
-        lblSum.setBounds(10,280,50,20);
+        lblName.setBounds(10,70,50,20);
+        lblOrderDetail.setBounds(10,100,110,20);
+        lblSum.setBounds(10,300,50,20);
         txtOrderNumber.setBounds(70,10,130,20);
         txtOrderAmount.setBounds(70,40,130,20);
-        productList.setBounds(70,70,200,200);
-        txtSum.setBounds(70,280,80,20);
+        txtName.setBounds(70,70,120,20);
+        productList.setBounds(70,100,200,180);
+        txtSum.setBounds(70,300,80,20);
         commitButton.setBounds(105,330,90,20);
 
         add(lblOrderNumber);
         add(txtOrderNumber);
         add(lblOrderAmount);
         add(txtOrderAmount);
+        add(lblName);
+        add(txtName);
         add(lblOrderDetail);
         add(productList);
         add(lblSum);

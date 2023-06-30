@@ -2,6 +2,7 @@ package service.impl;
 
 import model.Commodity;
 import model.MySQLUtils;
+import model.Order;
 import model.Supplier;
 import service.UserService;
 
@@ -152,6 +153,37 @@ public class UserServiceImpl implements UserService {
         }
 
         return commodity;
+    }
+
+    @Override
+    public void createOrder(Order order) {
+//        try {
+//            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("INSERT INTO order VALUES()");
+//            ResultSet rs = ps.executeQuery();
+//
+//            while (rs.next()) {
+//
+//                PreparedStatement vendorPs = MySQLUtils.getConn().prepareStatement("SELECT * FROM vendor WHERE Vendor_name=?");
+//                vendorPs.setString(1, string);
+//                ResultSet vendorData = vendorPs.executeQuery();
+//
+//                Supplier supplier = new Supplier();
+//                while (vendorData.next()) {
+//                    supplier.setSupplierName(vendorData.getString("Vendor_name"));
+//                    supplier.setId(vendorData.getString("Vendor_id"));
+//                    supplier.setTeltphone(vendorData.getString("Vendor_phone"));
+//                }
+//
+//                commodity.setSupplier(supplier);
+//
+//                vendorData.close();
+//                vendorPs.close();
+//            }
+//            rs.close();
+//            ps.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
 //    public static void main(String[] args) {

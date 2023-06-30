@@ -1,6 +1,7 @@
 package service;
 
 import model.Commodity;
+import model.Order;
 
 import java.util.List;
 
@@ -20,4 +21,7 @@ public interface UserService {
 
     //根据id查询商品
     public Commodity findById(String id);
+
+    //创建订单
+    public void createOrder(Order order);
 }

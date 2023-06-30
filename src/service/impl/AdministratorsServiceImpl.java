@@ -203,6 +203,31 @@ public class AdministratorsServiceImpl extends UserServiceImpl implements Admini
     }
 
     @Override
+    public Customer findCustomerByID(String ID) {
+        Customer customer = new Customer();
+
+        try {
+            PreparedStatement ps = MySQLUtils.getConn().prepareStatement("SELECT * FROM customer WHERE Customer_id=?");
+            ps.setString(1, ID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                customer.setCustomerId(rs.getString("Customer_id"));
+                customer.setCustomerName(rs.getString("Customer_name"));
+                customer.setUserName(rs.getString("Customer_account"));
+                customer.setPassword(rs.getString("Customer_password"));
+                customer.setCusomerPhone(rs.getString("Customer_phone"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customer;
+    }
+
+    @Override
     public Administrator findAdministraotrByAccount(String account) {
         Administrator administrator = new Administrator();
 

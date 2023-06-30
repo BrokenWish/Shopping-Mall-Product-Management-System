@@ -1,6 +1,7 @@
 package shopping.control;
 
 import model.Commodity;
+import model.Order;
 import model.Supplier;
 import model.User;
 import service.AdministratorService;
@@ -114,14 +115,24 @@ public class CustomerGUI extends JFrame{
         confirmButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-
                 try {
                     for (int i = 0; i < cartListModel.getSize(); i++) {
                         System.out.println(commodityList.get(i).toDetailString());
                         modify(commodityList.get(i));
                     }
                     new CustomerGUI(customerId);
-                    JOptionPane.showMessageDialog(null, "订单支付成功！");
+//                    JOptionPane.showMessageDialog(null, "订单创建成功！");
+
+                    Order order = new Order();
+
+
+
+                    administratorService.createOrder(order);
+                    new OrderGUI(customerId);
+
+
+
+
                     // update the existing GUI or create a new one here
                 } catch (Exception ex) {
                     ex.printStackTrace();

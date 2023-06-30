@@ -31,11 +31,15 @@ public interface AdministratorService {
     //根据用户名查询用户
     public Customer findCustomerByAccount(String account);
 
-    ////根据用户名查询管理员
+    //根据用户名ID查询用户
+    public Customer findCustomerByID(String ID);
+
+    //根据用户名查询管理员
     public Administrator findAdministraotrByAccount(String account);
 
     //查询所有用户的订单
     public List<Order> listOrder();
 
+    //根据用户名查订单
     public Order findOrderById(String customerId);
 }
